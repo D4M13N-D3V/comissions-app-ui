@@ -1,0 +1,14 @@
+name: on-pr
+on: [pull_request]
+
+jobs:
+  unit-test:
+    runs-on: [Ubuntu-Latest]
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install modules
+        run: npm install
+        
+      - name: Run tests
+        run: npm run test
