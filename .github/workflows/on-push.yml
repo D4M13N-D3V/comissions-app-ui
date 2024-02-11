@@ -8,7 +8,7 @@ jobs:
     runs-on: [ubuntu-latest]
     permissions: write-all
     env:
-      docker_image_name: ghcr.io/data443/dim-search-web-ui
+      docker_image_name: ghcr.io/comissions-app/ui
     steps:
 
     - uses: gittools/actions/gitversion/setup@v0.9.15
