@@ -3,18 +3,11 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AdbIcon from '@mui/icons-material/Adb';
 import { Chip, Icon } from '@mui/material';
 import {
   NovuProvider,
@@ -66,10 +59,10 @@ function ResponsiveAppBar() {
             sx={{
               mr: 2,
               paddingLeft: '1rem',
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'flex', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
+              letterSpacing: '0rem',
               textDecoration: 'none',
             }}
           >

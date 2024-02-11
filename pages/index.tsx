@@ -1,4 +1,5 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { GetAccessToken } from "@auth0/nextjs-auth0";
 import Layout from "../components/layout";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -6,16 +7,19 @@ import { Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import styled from "@emotion/styled";
-import IconButton from '@mui/material/IconButton';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import InfoIcon from '@mui/icons-material/Info';
-import Chip from "@mui/material/Chip";
-import { Fetcher } from "openapi-typescript-fetch";
-import { paths } from "../types";
 import Artist from "../components/artist";
+import { useEffect, useState } from "react";
+import { fetchSellers } from "../services/DiscoveryService";
+
+
+
+
+//API CODE FOR DISCOVERY
+
+
+
+
+
 
 
 const StyledTextField = styled(TextField)({
@@ -42,21 +46,20 @@ const StyledTextField = styled(TextField)({
 
 
 const Home = () => {
-  const { user, isLoading } = useUser();
-  const fetcher = Fetcher.for<paths>()
-  fetcher.configure({
-    baseUrl: 'https://localhost.7148',
-    init: {
-      headers: {
-  
-      },
+  const [sellersData, setSellersData] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      const data = await fetchSellers();
+      setSellersData(data);
     }
-  })
+    getData();
+  }, []);
+
+  const { user, isLoading } = useUser();
 
   return (
     <Layout user={user} loading={isLoading}>
       <>
-      
         { user ? (
           <>
         <Box sx={{ m: 1 }} />
@@ -70,26 +73,11 @@ const Home = () => {
         )}  
         <Box sx={{ m: 2 }} />
         <StyledTextField    inputRef={input => input && input.focus()} sx={{input: {textAlign: "center"}}} fullWidth color="secondary" label="SEARCH ARTISTS" variant="outlined" />
-        <Box sx={{ m: 4 }} />
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-        {chips.map((chip, index) => (
-          <Chip
-            key={index}
-            label={chip.label}
-            color="primary"
-            variant={chip.outlined ? 'outlined' : 'default'}
-            onClick={() => console.log(`Clicked on ${chip.label}`)}
-            style={{ margin: '0 5px' }}
-          />
+          <Box sx={{ m: 4 }} /> 
+
+        {sellersData.map((item) => (
+          <Artist artistId={item.id} />
         ))}
-      </div>
-
-
-    <ImageList sx={{ flex:1 }}>
-      {itemData.map((item) => (
-        <Artist artistId="1" />
-      ))}
-    </ImageList>
       </>
     </Layout>
   );
@@ -108,92 +96,4 @@ const chips = [
   { label: 'Category', outlined: false },
   { label: 'Category', outlined: true },
   { label: 'Category', outlined: false },
-];
-
-
-const itemData = [
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Neroshi',
-    author: '0 Stars (0 Reviews)',
-  },
 ];
