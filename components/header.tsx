@@ -66,7 +66,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            COMISSIONS.APP
+            REQUEST.BOX
           </Typography>
                 </Box>
 
