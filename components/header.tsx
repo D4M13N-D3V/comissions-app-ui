@@ -22,7 +22,7 @@ type HeaderProps = {
 };
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Seller Dashboard', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -105,16 +105,16 @@ function ResponsiveAppBar() {
                     onClose={handleCloseUserMenu}
                   >
                   <MenuItem key="sellerDashboard" onClick={handleCloseUserMenu}>
-                    <Button color="secondary" variant='contained' href="profile">Seller Dashboard</Button>
+                    <Button fullWidth color="secondary" variant='contained' href="/profile">Seller Dashboard</Button>
                   </MenuItem>
                   <MenuItem key="myOrders" onClick={handleCloseUserMenu}>
-                    <Button color="primary" href="profile">My Orders</Button>
+                    <Button fullWidth color="primary" href="profile">My Orders</Button>
                   </MenuItem>
                   <MenuItem key="settings" onClick={handleCloseUserMenu}>
-                    <Button color="primary" href="profile">Settings</Button>
+                    <Button fullWidth color="primary" href="/settings">Settings</Button>
                   </MenuItem>
                     <MenuItem key="logout" onClick={handleCloseUserMenu}>
-                      <Button color="error" href="/api/auth/logout">Logout</Button>
+                      <Button fullWidth color="error" href="/api/auth/logout">Logout</Button>
                     </MenuItem>
                   </Menu>
                 </Box>

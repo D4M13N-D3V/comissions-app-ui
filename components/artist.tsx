@@ -54,13 +54,13 @@ const Artist = ({user, artistId}) => {
         </Grid>
         <Grid item xs={6} md={4}>
           <Grid item xs={6} md={4}>
-            <Button href={"seller/"+artistId} color="primary" variant='contained' sx={{width:150}}>View Profile</Button>
+            <Button href={"seller/"+artistId} color="primary" variant='contained' sx={{width:160}}>View Profile</Button>
               {user ? (
-                <Button color="secondary" variant='contained' sx={{ width: 150, marginTop:2 }}>Request Order</Button>
+                <Button color="secondary" variant='contained' sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
               ) : (
                 <Tooltip title="Log in order to place a request.">
                   <span>
-                    <Button disabled color="secondary" variant='contained' sx={{ width: 150, marginTop:2 }}>Request Order</Button>
+                    <Button disabled color="secondary" variant='contained' sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
                   </span>
                 </Tooltip>
               )}
