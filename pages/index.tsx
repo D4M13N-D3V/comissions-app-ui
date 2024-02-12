@@ -10,16 +10,7 @@ import styled from "@emotion/styled";
 import Artist from "../components/artist";
 import { useEffect, useState } from "react";
 import { fetchSellers } from "../services/DiscoveryService";
-
-
-
-
-//API CODE FOR DISCOVERY
-
-
-
-
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const StyledTextField = styled(TextField)({
@@ -47,10 +38,12 @@ const StyledTextField = styled(TextField)({
 
 const Home = () => {
   const [sellersData, setSellersData] = useState([]);
+  const [loading, setLoading] = useState(true); // State for loading indicator
   useEffect(() => {
     const getData = async () => {
       const data = await fetchSellers();
       setSellersData(data);
+      setLoading(false);
     }
     getData();
   }, []);
@@ -59,26 +52,20 @@ const Home = () => {
 
   return (
     <Layout user={user} loading={isLoading}>
-      <>
-        { user ? (
-          <>
-        <Box sx={{ m: 1 }} />
-          <ButtonGroup fullWidth variant="contained" aria-label="outlined primary button group">
-            <Button color="primary" fullWidth>Your Orders</Button>
-            <Button color="secondary" fullWidth>Seller Dashboard</Button>
-          </ButtonGroup>
-          </>
-        ): (
-          <Typography variant="h2" component="h2" textAlign="center">COMISSIONS.APP</Typography>
-        )}  
-        <Box sx={{ m: 2 }} />
-        <StyledTextField    inputRef={input => input && input.focus()} sx={{input: {textAlign: "center"}}} fullWidth color="secondary" label="SEARCH ARTISTS" variant="outlined" />
-          <Box sx={{ m: 4 }} /> 
-
-        {sellersData.map((item) => (
-          <Artist artistId={item.id} />
-        ))}
-      </>
+      {loading ? ( // Render loading indicator if loading is true
+        <Box sx={{textAlign:"center", paddingTop:20}}>
+          <Typography variant="h4" sx={{textAlign:"center"}}>
+            Loading...
+          </Typography>
+        <CircularProgress sx={{paddingTop:5}} />
+        </Box>
+      ) : (
+        <>
+          {sellersData.map((item) => (
+            <Artist artistId={item.id} />
+          ))}
+        </>
+      )}
     </Layout>
   );
 };

@@ -104,7 +104,13 @@ function ResponsiveAppBar() {
                     open={Boolean(anchorElUser)}
                     onClose={handleCloseUserMenu}
                   >
-                  <MenuItem key="logout" onClick={handleCloseUserMenu}>
+                  <MenuItem key="sellerDashboard" onClick={handleCloseUserMenu}>
+                    <Button color="secondary" variant='contained' href="profile">Seller Dashboard</Button>
+                  </MenuItem>
+                  <MenuItem key="myOrders" onClick={handleCloseUserMenu}>
+                    <Button color="primary" href="profile">My Orders</Button>
+                  </MenuItem>
+                  <MenuItem key="settings" onClick={handleCloseUserMenu}>
                     <Button color="primary" href="profile">Settings</Button>
                   </MenuItem>
                     <MenuItem key="logout" onClick={handleCloseUserMenu}>

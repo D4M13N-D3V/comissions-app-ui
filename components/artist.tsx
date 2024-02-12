@@ -15,6 +15,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArtistPortfolio from './artistPortfolio';
+import Button from '@mui/material/Button';
 import { useEffect, useState } from "react";
 import { fetchSeller } from "../services/DiscoveryService";
 
@@ -36,16 +37,6 @@ const Artist = ({artistId}) => {
       <Card color="primary" sx={{margin:5}}>
       <CardContent>
       <Grid container spacing={2}>
-        <Grid item xs={6} md={4}>
-          <Item>
-            <CardMedia
-              component="img"
-              sx={{ width: 151 }}
-              image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-              alt="Live from space album cover"
-            />
-          </Item>
-        </Grid>
         <Grid item xs={6} md={8}>
           <Item>
             <Typography variant="h5" component="h2">
@@ -60,30 +51,19 @@ const Artist = ({artistId}) => {
           </Item>
           
         </Grid>
+        <Grid item xs={6} md={4}>
+          <Grid item xs={6} md={4}>
+            <Button color="secondary" variant='contained' sx={{width:150  }}>Request Order</Button>
+            <Button href={"seller/"+artistId} color="primary" variant='contained' sx={{width:150, marginTop:2}}>View Profile</Button>
+          </Grid>
+        </Grid>
         <Grid item xs={12} md={12}>
 
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1-content"
-            id="panel1-header"
-          >
-            View Portfolio
-          </AccordionSummary>
-          <AccordionDetails>
-            <ArtistPortfolio artistId={artistId} />
-          </AccordionDetails>
-        </Accordion>
           <Item>
           </Item>
         </Grid>
       </Grid>   
       </CardContent>
-      <CardActions>
-      <IconButton color="primary" size="small"><AccountCircleOutlinedIcon></AccountCircleOutlinedIcon>Profile</IconButton>
-      <IconButton color="primary" size="small"><StarBorderOutlinedIcon></StarBorderOutlinedIcon>Reviews</IconButton>
-      <IconButton color="primary" size="small"><ShoppingCartCheckoutOutlinedIcon></ShoppingCartCheckoutOutlinedIcon>Browse Services</IconButton>
-      </CardActions>
     </Card>)
 }
 export default Artist
