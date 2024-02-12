@@ -62,7 +62,7 @@ const Home = () => {
       ) : (
         <>
           {sellersData.map((item) => (
-            <Artist artistId={item.id} />
+            <Artist user={user} artistId={item.id} />
           ))}
         </>
       )}
