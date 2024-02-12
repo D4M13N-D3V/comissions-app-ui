@@ -6,12 +6,8 @@ import { Box, Grid, Card, CardContent, Typography, List, ListItem, ListItemButto
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
 import { fetchSeller } from "../../services/DiscoveryService";
-import ServicePortfolio from "../../components/servicePortfolio";
-import ServicePanel from "../../components/servicePanel";
 import ArtistPortfolio from "../../components/artistPortfolio";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import Tooltip from '@mui/material/Tooltip';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
@@ -135,9 +131,19 @@ const SellerProfile = () => {
               </Card>
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign:"center"}} >
+            {user ? (
               <Button size="large" color="secondary" variant="contained" href={"../order/"+id}>
                 Request Order
               </Button>
+            ) : (
+              <Tooltip title="Log in order to place a request.">
+                <span>
+                  <Button size="large" color="secondary" variant="contained" disabled>
+                    Request Order
+                  </Button>
+                </span>
+              </Tooltip>
+            )}
             </Grid>
             <Grid item xs={12} sm={12}>
               <ArtistPortfolio artistId={id} />
