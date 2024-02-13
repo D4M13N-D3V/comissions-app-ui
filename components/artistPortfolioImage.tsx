@@ -2,7 +2,6 @@ import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useEffect, useState } from "react";
-import { fetchSellerPortfolio,getPortfolioUrl } from "../services/DiscoveryService";
 
 import { CircularProgress } from '@mui/material';
 
@@ -13,21 +12,12 @@ const ArtistPortfolioImage = ({artistId,itemId}) => {
   const handleImageLoaded = () => {
     setLoaded(true);
   };
-  const [portfolioData, setPortfolioData] = useState([]);
-  useEffect(() => {
-    const getData = async () => {
-      const data = await fetchSellerPortfolio(artistId);
-      console.log(data)
-      setPortfolioData(data);
-    }
-    getData();
-  }, []);
     
     return (
         <ImageListItem key={itemId }>
         <img
-          srcSet={`${getPortfolioUrl(artistId,itemId)}`}
-          src={`${getPortfolioUrl(artistId,itemId)}`}
+          srcSet={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
+          src={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
           alt={itemId}
           loading="lazy"
           style={{ filter: loaded ? 'blur(0)' : 'blur(10px)', backgroundColor:'grey' }}

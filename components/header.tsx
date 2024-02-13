@@ -105,7 +105,7 @@ function ResponsiveAppBar() {
                     onClose={handleCloseUserMenu}
                   >
                   <MenuItem key="sellerDashboard" onClick={handleCloseUserMenu}>
-                    <Button fullWidth color="secondary" variant='contained' href="/profile">Seller Dashboard</Button>
+                    <Button fullWidth color="secondary" variant='contained' href="/sellerDashboard">Seller Dashboard</Button>
                   </MenuItem>
                   <MenuItem key="myOrders" onClick={handleCloseUserMenu}>
                     <Button fullWidth color="primary" href="profile">My Orders</Button>

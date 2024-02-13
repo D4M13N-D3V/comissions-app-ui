@@ -1,15 +1,8 @@
 import Layout from "../../../components/layout";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { Box, Grid, Card, CardContent, Typography, List, ListItem, ListItemButton, ListItemIcon, 
-  ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button,
-  Tabs, Tab, CircularProgress } from "@mui/material";
+import { Box, Grid, Typography, Button, CircularProgress, TextField} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
-import { fetchSeller } from "../../../services/DiscoveryService";
-import ArtistPortfolio from "../../../components/artistPortfolio";
-import Tooltip from '@mui/material/Tooltip';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { TextField } from "@mui/material";
 import CurrencyTextField from '@lupus-ai/mui-currency-textfield'
 
 interface TabPanelProps {
@@ -19,16 +12,17 @@ interface TabPanelProps {
 }
 
 const SellerProfile = () => {
+  
     const { user, isLoading } = useUser();
     const router = useRouter()
     const { id } = router.query 
-    console.log(router.query)
     const [sellerData, setSellerData] = useState([]);
     const [loading, setLoading] = useState(true); // State for loading indicator
     useEffect(() => {
       const getData = async () => {
         if(id){
-          const data = await fetchSeller(id);
+          const response = await fetch('/api/discovery/seller/'+id);
+          const data = await response.json();
           setSellerData(data);
           setLoading(false); // Once data is fetched, set loading to false
         }

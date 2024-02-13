@@ -18,7 +18,6 @@ import ArtistPortfolio from './artistPortfolio';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { useEffect, useState } from "react";
-import { fetchSeller } from "../services/DiscoveryService";
 
 
 import { IconButton } from '@mui/material';
@@ -27,8 +26,8 @@ const Artist = ({user, artistId}) => {
   const [sellerData, setSellerData] = useState([]);
   useEffect(() => {
     const getData = async () => {
-      const data = await fetchSeller(artistId);
-      console.log(data)
+      const response = await fetch('/api/discovery/seller/'+artistId);
+      const data = await response.json();
       setSellerData(data);
     }
     getData();
@@ -56,7 +55,7 @@ const Artist = ({user, artistId}) => {
           <Grid item xs={6} md={4}>
             <Button href={"seller/"+artistId} color="primary" variant='contained' sx={{width:160}}>View Profile</Button>
               {user ? (
-                <Button color="secondary" variant='contained' sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
+                <Button color="secondary" variant='contained' href={"/seller/"+artistId+"/request"} sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
               ) : (
                 <Tooltip title="Log in order to place a request.">
                   <span>
