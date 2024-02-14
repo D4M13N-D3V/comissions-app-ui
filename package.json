@@ -13,6 +13,7 @@
     "@lupus-ai/mui-currency-textfield": "^1.0.3",
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.6",
+    "@mui/x-data-grid": "^6.19.4",
     "@novu/notification-center": "^0.22.0",
     "next": "latest",
     "openapi-typescript-fetch": "^1.1.3",
