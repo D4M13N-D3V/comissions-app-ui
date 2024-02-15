@@ -30,10 +30,11 @@ const SellerProfile = () => {
       {loading ? ( // Render loading indicator if loading is true
         <Box sx={{textAlign:"center", paddingTop:20}}>
           <Typography variant="h4" sx={{textAlign:"center"}}>
-            Loading...
+            Loading
           </Typography>
-        <CircularProgress sx={{paddingTop:5}} />
-        </Box>
+          <Box sx={{ paddingTop: 5 }} />
+          <CircularProgress  />
+          </Box>
       ) : (
         <Grid container spacing={2} sx={{padding:4}}>
             <Grid container   sx={{textAlign:"center"}}>
@@ -44,7 +45,7 @@ const SellerProfile = () => {
               </Grid>
               <Grid item xs={12} sm={8}  sx={{textAlign:"center"}}>
                 <Typography variant="h4">
-                  {sellerData.name}
+                  {sellerData["name"]}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={2}  sx={{textAlign:"center"}}>
@@ -57,7 +58,7 @@ const SellerProfile = () => {
                   Biography
                   </Typography>
                   <Typography sx={{paddingTop:2, textAlign:"center"}}>
-                    {sellerData.biography}
+                    {sellerData["biography"]}
                   </Typography>
                 </CardContent>
               </Card>

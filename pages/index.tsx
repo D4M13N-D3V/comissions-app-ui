@@ -22,9 +22,10 @@ const Home = () => {
       {loading ? ( // Render loading indicator if loading is true
         <Box sx={{textAlign:"center", paddingTop:20}}>
           <Typography variant="h4" sx={{textAlign:"center"}}>
-            Loading...
+            Loading
           </Typography>
-        <CircularProgress sx={{paddingTop:5}} />
+          <Box sx={{ paddingTop: 5 }} />
+          <CircularProgress  />
         </Box>
       ) : (
         <>

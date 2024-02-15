@@ -13,14 +13,14 @@ const ArtistPortfolio = ({artistId}) => {
       setPortfolioData(data);
       setLoading(false);
     }
-    console.log(portfolioData)
+    //console.log(portfolioData)
     getData();
   }, []);
     return (
         (loading) ? (
           <Box sx={{textAlign:"center", paddingTop:20}}>
             <Typography variant="h4" sx={{textAlign:"center"}}>
-              Loading...
+              Loading
             </Typography>
           <CircularProgress sx={{paddingTop:5}} />
           </Box>

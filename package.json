@@ -17,6 +17,7 @@
     "@mui/x-date-pickers": "^6.19.4",
     "@novu/notification-center": "^0.22.0",
     "dayjs": "^1.11.10",
+    "formidable": "^3.5.1",
     "next": "latest",
     "openapi-typescript-fetch": "^1.1.3",
     "react": "^18.2.0",

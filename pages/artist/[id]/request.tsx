@@ -40,9 +40,10 @@ const SellerProfile = () => {
       {loading ? ( // Render loading indicator if loading is true
         <Box sx={{textAlign:"center", paddingTop:20}}>
           <Typography variant="h4" sx={{textAlign:"center"}}>
-            Loading...
+            Loading
           </Typography>
-        <CircularProgress sx={{paddingTop:5}} />
+          <Box sx={{ paddingTop: 5 }} />
+          <CircularProgress  />
         </Box>
       ) : (
         <Grid container spacing={2} sx={{padding:4}}>
@@ -65,7 +66,7 @@ const SellerProfile = () => {
               <>
 
               <Grid item xs={12} sm={12} sx={{textAlign:"center"}} >
-                <TextField fullWidth disabled id="fo" label="Artist" variant="outlined" value={sellerData.name}/>
+                <TextField fullWidth disabled id="fo" label="Artist" variant="outlined" value={sellerData["name"]}/>
                 <Box sx={{padding:2}} />  
                 <TextField id="outlined-multiline-static" label="Request Details" fullWidth multiline rows={4} defaultValue="" placeholder="Put the details of your request. Links to reference images. Descriptions of what you want. Things like that."/>
                 <Box sx={{padding:2}} />  

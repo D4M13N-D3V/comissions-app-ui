@@ -40,13 +40,13 @@ const Artist = ({user, artistId}) => {
         <Grid item xs={6} md={8}>
           <Item>
             <Typography variant="h5" component="h2">
-              {sellerData.name}
+              {sellerData["name"]}
             </Typography>
             <Typography color="primary">
-              {sellerData.averageRating ? `${sellerData.averageRating} Stars (${sellerData.reviewCount} Reviews)` : "No Reviews"}
+              {sellerData["averageRating"] ? `${sellerData["averageRating"]} Stars (${sellerData["reviewCount"]} Reviews)` : "No Reviews"}
             </Typography>
             <Typography variant="body2" component="p">
-              {sellerData.biography}
+              {sellerData["biography"]}
             </Typography>
           </Item>
           

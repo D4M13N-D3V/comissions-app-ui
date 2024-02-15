@@ -24,7 +24,7 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
 const Profile = ({ user, isLoading }) => {
   return (
     <Layout user={user} loading={isLoading}>
-      {isLoading ? <>Loading...</> : <ProfileCard user={user} />}
+      {isLoading ? <>Loading</> : <ProfileCard user={user} />}
     </Layout>
   );
 };

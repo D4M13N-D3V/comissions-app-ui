@@ -12,6 +12,7 @@ import CardActions from '@mui/material/CardActions';
 import { styled } from '@mui/material/styles';
 import SwipeableViews from '../components/swipableView';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import EditableArtistPortfolio from "../components/editableArtistPortfolio";
 
 
 
@@ -146,9 +147,10 @@ const SellerDashoard = (ctx) => {
       {loading ? ( // Render loading indicator if loading is true
         <Box sx={{ textAlign: "center", paddingTop: 20 }}>
           <Typography variant="h4" sx={{ textAlign: "center" }}>
-            Loading...
+            Loading
           </Typography>
-          <CircularProgress sx={{ paddingTop: 5 }} />
+          <Box sx={{ paddingTop: 5 }} />
+          <CircularProgress  />
         </Box>
       ) : (
         <Layout user={user} loading={isLoading}>
@@ -240,7 +242,7 @@ const SellerDashoard = (ctx) => {
                                 />
                               </TabPanel>
                               <TabPanel value={tabValue} index={1} dir={theme.direction}>
-                                Item Two
+                                <EditableArtistPortfolio artistId={sellerData["id"]}></EditableArtistPortfolio>
                               </TabPanel>
                               <TabPanel value={tabValue} index={2} dir={theme.direction}>
                                 Item Three
@@ -262,70 +264,7 @@ const SellerDashoard = (ctx) => {
               </>
 
             ) : (
-              <>
-                <Grid item container sx={{ textAlign: "center" }}>
-                  <Grid item xs={12} sm={10} sx={{ textAlign: "center" }}>
-                  </Grid>
-                  <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
-                    <Button color="secondary" variant="contained" href="../">
-                      Save
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid item container xs={12} sm={12}>
-                  <Grid item xs={12} sm={12}>
-                    <TextField variant="filled" fullWidth label="Artist Name" />
-                    <Box sx={{ padding: 1 }} />
-                    <TextField variant="outlined" fullWidth multiline rows={4} label="Biography" />
-                    <Box sx={{ padding: 1 }} />
-                  </Grid>
-                  <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
-                    <Button sx={{ width: "50%" }} color="success" variant="contained">Payout Portal</Button>
-                  </Grid>
-                </Grid>
-
-                <Grid item container xs={12} sm={12}>
-
-                  <AppBar position="static">
-                    <Tabs
-                      value={tabValue}
-                      onChange={handleChange}
-                      indicatorColor="secondary"
-                      textColor="inherit"
-                      variant="fullWidth"
-                      aria-label="full width tabs example"
-                    >
-                      <Tab label="New Requests" {...a11yProps(0)} />
-                      <Tab label="Portfolio" {...a11yProps(1)} />
-                      <Tab label="Ongoing Requests" {...a11yProps(2)} />
-                    </Tabs>
-                  </AppBar>
-                  <SwipeableViews
-                    index={tabValue}
-                    onChangeIndex={handleChangeIndex}
-                  >
-                    <TabPanel value={tabValue} index={0} dir={theme.direction}>
-                      <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        initialState={{
-                          pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
-                          },
-                        }}
-                        pageSizeOptions={[5, 10]}
-                        sx={{ width: '100%' }}
-                      />
-                    </TabPanel>
-                    <TabPanel value={tabValue} index={1} dir={theme.direction}>
-                      Item Two
-                    </TabPanel>
-                    <TabPanel value={tabValue} index={2} dir={theme.direction}>
-                      Item Three
-                    </TabPanel>
-                  </SwipeableViews>
-                </Grid>
-              </>
+              <></>
             ))}
             <Grid item container xs={12} sm={12}>
             </Grid>
