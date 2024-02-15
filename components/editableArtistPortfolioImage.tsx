@@ -2,8 +2,9 @@ import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import { useEffect, useState } from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, ImageListItemBar } from '@mui/material';
 
 import { IconButton } from '@mui/material';
 
@@ -13,8 +14,16 @@ const EditableArtistPortfolioImage = ({artistId,itemId}) => {
     setLoaded(true);
   };
     
+
+  const deleteButton = () => {
+    fetch('/api/artist/portfolio/'+itemId+"/delete", {
+      method: 'DELETE'
+    }).then(response => 
+        window.location.reload());
+  }
+
     return (
-        <ImageListItem key={itemId }>
+        <ImageListItem key={itemId } sx={{maxWidth:300, maxHeight:300, overflow:"hidden"}}>
         <img
           srcSet={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
           src={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
@@ -23,6 +32,13 @@ const EditableArtistPortfolioImage = ({artistId,itemId}) => {
           style={{ filter: loaded ? 'blur(0)' : 'blur(10px)', backgroundColor:'grey' }}
           onLoad={handleImageLoaded}
         />
+        <ImageListItemBar
+            actionIcon={
+                <IconButton onClick={deleteButton} color="error" >
+                    <DeleteIcon />
+                </IconButton>
+            }>
+        </ImageListItemBar>
       </ImageListItem>)
 }
 export default EditableArtistPortfolioImage

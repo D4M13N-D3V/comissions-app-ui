@@ -1,11 +1,16 @@
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { IncomingForm } from 'formidable'
+import fs from 'fs/promises';
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+async function createBlobFromFile(path: string): Promise<Blob> {
+    const file = await fs.readFile(path);
+    return new Blob([file]);
+}
 
 export default withApiAuthRequired(async function handler(req, res) {
   const { accessToken } = await getAccessToken(req, res);
@@ -18,22 +23,19 @@ export default withApiAuthRequired(async function handler(req, res) {
       res.status(500).json({ error: 'Error parsing form' });
       return;
     }
-    const file = files["file"]; // Assuming your file input field name is 'file'
-    console.log(file)
-    const formData = new FormData();
-    formData.append('file', file); // Append the file to FormData
-    
-    console.log(formData)
+    const file = files["newImage"]; // Assuming your file input field name is 'file'
     try {
       
       const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/SellerProfile/Portfolio', {
         method: 'POST',
         headers: {
-          "Authorization": `Bearer ${accessToken}`
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": " application/octet-stream"
         },
-        body: formData // Don't set Content-Type, FormData will handle it
+        body: await createBlobFromFile(file[0].filepath) // Don't set Content-Type, FormData will handle it
       });
-
+      
+      //console.log(response)
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to upload file');

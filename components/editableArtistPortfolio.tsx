@@ -22,7 +22,7 @@ const EditableArtistPortfolio = ({ artistId }) => {
     function handlePortfolioUploadImageChange(event) {
         const file = event.target.files[0];
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('newImage', file);
       
         fetch('/api/artist/portfolio', {
           method: 'POST',
@@ -45,7 +45,9 @@ const EditableArtistPortfolio = ({ artistId }) => {
             </Box>
         ) :
             (
-                <Grid container spacing={2} sx={{ padding: 4 }}>
+                (portfolioData.length > 0 ?(<>
+                
+                <Grid container spacing={2} sm={12} sx={{ padding: 4 }}>
                     <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
                         <input
                             id="portfolioUploadInput"
@@ -60,20 +62,43 @@ const EditableArtistPortfolio = ({ artistId }) => {
                             variant='outlined'
                                 component="span"
                                 size="small"
+                                sx={{width:"100%"}}
                                 startIcon={<FileOpenIcon />}
                             >
                                 Add Image
                             </Button>
                         </label>
                     </Grid>
-                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
-                        <ImageList cols={2} rowHeight={200} sx={{ maxHeight: 400 }}>
-                            {portfolioData.map((item) => (
-                                <EditableArtistPortfolioImage artistId={artistId} itemId={item.id} />
-                            ))}
-                        </ImageList>
-                    </Grid>
                 </Grid>
+                    <ImageList cols={2} rowHeight={200} sx={{ height: 400, width:"100%" }}>
+                        {portfolioData.map((item) => (
+                            <EditableArtistPortfolioImage artistId={artistId} itemId={item.id} />
+                        ))}
+                    </ImageList>
+                    </>
+                ) : (
+                    <Box sx={{ textAlign: "center" }}>
+                    <input
+                        id="portfolioUploadInput"
+                        style={{ display: 'none' }}
+                        accept="image/*"
+                        type="file"
+                        onChange={handlePortfolioUploadImageChange}
+                    />
+                        <label htmlFor="portfolioUploadInput">
+                            <Button
+                            fullWidth
+                            variant='outlined'
+                                component="span"
+                                size="small"
+                                sx={{width:"100%"}}
+                                startIcon={<FileOpenIcon />}
+                            >
+                            Upload Your First Portfolio Image
+                            </Button>
+                        </label>
+                    </Box>
+                ))
             )
     )
 }

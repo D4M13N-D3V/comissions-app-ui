@@ -241,7 +241,7 @@ const SellerDashoard = (ctx) => {
                                   sx={{ width: '100%' }}
                                 />
                               </TabPanel>
-                              <TabPanel value={tabValue} index={1} dir={theme.direction}>
+                              <TabPanel value={tabValue} index={1} dir={theme.direction}  >
                                 <EditableArtistPortfolio artistId={sellerData["id"]}></EditableArtistPortfolio>
                               </TabPanel>
                               <TabPanel value={tabValue} index={2} dir={theme.direction}>
