@@ -9,7 +9,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true); // State for loading indicator
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/api/discovery/sellers');
+      const response = await fetch('/api/discovery/artists');
       const data = await response.json();
       setSellersData(data);
       setLoading(false);

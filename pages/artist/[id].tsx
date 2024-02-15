@@ -15,7 +15,7 @@ const SellerProfile = () => {
     useEffect(() => {
       const getData = async () => {
         if(id){
-          const response = await fetch('/api/discovery/seller/'+id);
+          const response = await fetch('/api/discovery/artist/'+id);
           const data = await response.json();
           setSellerData(data);
           setLoading(false); // Once data is fetched, set loading to false
@@ -82,7 +82,7 @@ const SellerProfile = () => {
             </Grid>
             <Grid item xs={12} sm={12} sx={{textAlign:"center"}} >
             {user ? (
-              <Button size="large" color="secondary" variant="contained" href={"/seller/"+id+"/request"}>
+              <Button size="large" color="secondary" variant="contained" href={"/artist/"+id+"/request"}>
                 Request Order
               </Button>
             ) : (

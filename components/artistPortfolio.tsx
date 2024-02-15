@@ -8,7 +8,7 @@ const ArtistPortfolio = ({artistId}) => {
   const [loading, setLoading] = useState(true); // State for loading indicator
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/api/discovery/seller/'+artistId+'/portfolio');
+      const response = await fetch('/api/discovery/artist/'+artistId+'/portfolio');
       const data = await response.json();
       setPortfolioData(data);
       setLoading(false);

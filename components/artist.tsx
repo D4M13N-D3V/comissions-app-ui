@@ -26,7 +26,7 @@ const Artist = ({user, artistId}) => {
   const [sellerData, setSellerData] = useState([]);
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/api/discovery/seller/'+artistId);
+      const response = await fetch('/api/discovery/artist/'+artistId);
       const data = await response.json();
       setSellerData(data);
     }
@@ -53,9 +53,9 @@ const Artist = ({user, artistId}) => {
         </Grid>
         <Grid item xs={6} md={4}>
           <Grid item xs={6} md={4}>
-            <Button href={"seller/"+artistId} color="primary" variant='contained' sx={{width:160}}>View Profile</Button>
+            <Button href={"artist/"+artistId} color="primary" variant='contained' sx={{width:160}}>View Profile</Button>
               {user ? (
-                <Button color="secondary" variant='contained' href={"/seller/"+artistId+"/request"} sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
+                <Button color="secondary" variant='contained' href={"/artist/"+artistId+"/request"} sx={{ width: 160, marginTop:2 }}>Submit Request</Button>
               ) : (
                 <Tooltip title="Log in order to place a request.">
                   <span>

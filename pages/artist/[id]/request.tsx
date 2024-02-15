@@ -21,7 +21,7 @@ const SellerProfile = () => {
     useEffect(() => {
       const getData = async () => {
         if(id){
-          const response = await fetch('/api/discovery/seller/'+id);
+          const response = await fetch('/api/discovery/artist/'+id);
           const data = await response.json();
           setSellerData(data);
           setLoading(false); // Once data is fetched, set loading to false
