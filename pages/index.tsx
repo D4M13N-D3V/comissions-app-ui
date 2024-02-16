@@ -1,42 +1,91 @@
+import * as React from 'react';
+import { PaletteMode } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
+import SvgMaterialDesign from '../components/SvgMaterialDesign';
+import AppAppBar from '../components/AppAppBar';
+import Hero from '../components/Hero';
+import Highlights from '../components/Highlights';
+import Pricing from '../components/Pricing';
+import BetaAccess from '../components/BetaAccess';
+import FAQ from '../components/FAQ';
+import Footer from '../components/Footer';
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Layout from "../components/layout";
-import { Typography, Box, CircularProgress } from '@mui/material';
-import Artist from "../components/artist";
-import { useEffect, useState } from "react";
+const defaultTheme = createTheme({});
 
-const Home = () => {
-  const [sellersData, setSellersData] = useState([]);
-  const [loading, setLoading] = useState(true); // State for loading indicator
-  useEffect(() => {
-    const getData = async () => {
-      const response = await fetch('/api/discovery/artists');
-      const data = await response.json();
-      setSellersData(data);
-      setLoading(false);
-    }
-    getData();
-  }, []);
-  const { user, isLoading } = useUser();
+interface ToggleCustomThemeProps {
+  showCustomTheme: Boolean;
+  toggleCustomTheme: () => void;
+}
+
+function ToggleCustomTheme({
+  showCustomTheme,
+  toggleCustomTheme,
+}: ToggleCustomThemeProps) {
   return (
-    <Layout user={user} loading={isLoading}>
-      {loading ? ( // Render loading indicator if loading is true
-        <Box sx={{textAlign:"center", paddingTop:20}}>
-          <Typography variant="h4" sx={{textAlign:"center"}}>
-            Loading
-          </Typography>
-          <Box sx={{ paddingTop: 5 }} />
-          <CircularProgress  />
-        </Box>
-      ) : (
-        <>
-          {sellersData.map((item) => (
-            <Artist user={user} artistId={item.id} />
-          ))}
-        </>
-      )}
-    </Layout>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100dvw',
+        position: 'fixed',
+        bottom: 24,
+      }}
+    >
+      <ToggleButtonGroup
+        color="primary"
+        exclusive
+        value={showCustomTheme}
+        onChange={toggleCustomTheme}
+        aria-label="Platform"
+        sx={{
+          backgroundColor: 'background.default',
+          '& .Mui-selected': {
+            pointerEvents: 'none',
+          },
+        }}
+      >
+        <ToggleButton value>
+          <AutoAwesomeRoundedIcon sx={{ fontSize: '20px', mr: 1 }} />
+          Custom theme
+        </ToggleButton>
+        <ToggleButton value={false}>
+          <SvgMaterialDesign sx={{ fontSize: '20px', mr: 1 }} />
+          Material Design
+        </ToggleButton>
+      </ToggleButtonGroup>
+    </Box>
   );
-};
+}
 
-// fast/cached SSR page
-export default Home;
+export default function LandingPage() {
+  const [showCustomTheme, setShowCustomTheme] = React.useState(true);
+  
+  const { user, isLoading } = useUser();
+
+  const toggleCustomTheme = () => {
+    setShowCustomTheme((prev) => !prev);
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <AppAppBar user={user} />
+      <Hero />
+      <Box sx={{ bgcolor: 'background.default' }}>
+        <Highlights />
+        <Divider />
+        <BetaAccess />
+        <Divider /> 
+        <FAQ />
+        <Footer />
+      </Box>
+    </ThemeProvider>
+  );
+}

@@ -35,7 +35,7 @@ export default withApiAuthRequired(async function handler(req, res) {
         body: await createBlobFromFile(file[0].filepath) // Don't set Content-Type, FormData will handle it
       });
       
-      //console.log(response)
+      (response)
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to upload file');

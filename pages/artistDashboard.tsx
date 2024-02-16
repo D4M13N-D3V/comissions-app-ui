@@ -4,15 +4,19 @@ import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Layout from "../components/layout";
-import { Grid, Button, Typography, TextField, Box, CircularProgress } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Grid, Button, Typography, TextField, Box, CircularProgress, IconButton } from "@mui/material";
+import { useState, useEffect,useRef } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import { styled } from '@mui/material/styles';
 import SwipeableViews from '../components/swipableView';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import EditableArtistPortfolio from "../components/editableArtistPortfolio";
+import Popover from '@mui/material/Popover';
+import ArtistDashboardRequest from "../components/artistDashboardRequest";
 
 
 
@@ -20,21 +24,16 @@ import EditableArtistPortfolio from "../components/editableArtistPortfolio";
 
 const SellerDashoard = (ctx) => {
   const { user, isLoading } = useUser();
-  const [sellerRequestData, setSellerRequestData] = useState([]);
   const [sellerData, setSellerData] = useState([]);
   const [loading, setLoading] = useState(true); // State for loading indicator
   const [isOnboarded, setIsOnboarded] = useState(false);
   const [onBoardUrl, setOnBoardUrl] = useState("");
-
   const [tabValue, setTabValue] = useState(1);
 
   const getData = async () => {
     const response = await fetch('/api/artist/profile');
     const sellerProfile = await response.json();
     setSellerData(sellerProfile);
-    const requestResponse = await fetch('/api/artist/request', { method: "GET" });
-    const sellerRequest = await requestResponse.json();
-    setSellerRequestData(sellerRequest);
     const onboardCheckRequest = await fetch('/api/artist/onboarded', { method: "GET" });
     const onboardCheckResponse = await onboardCheckRequest.json();
     setIsOnboarded(onboardCheckResponse["onboarded"]);
@@ -44,6 +43,8 @@ const SellerDashoard = (ctx) => {
   
     setLoading(false); // Once data is fetched, set loading to false
   }
+
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -92,11 +93,57 @@ const SellerDashoard = (ctx) => {
     getData();
   }, []);
   const theme = useTheme();
-
   const columns: GridColDef[] = [
     { field: 'requestor', headerName: 'User', width: 150 },
     { field: 'message', headerName: 'Message', width: 280 },
-    { field: 'amount', headerName: 'Amount', width: 125 },
+    { field: 'amount', headerName: 'Amount', width: 50 },
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      renderCell: (params) => {
+
+        const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+        const open = Boolean(anchorEl);
+        const id = open ? 'simple-popover' : undefined;
+        const buttonRef = useRef(null);
+
+        const accept = (e) => {
+          return alert("TEST");
+        };
+
+        const decline = (e) => {
+          return alert("TEST");
+        };
+
+        const handleClick = (e) => {
+          setAnchorEl(e.currentTarget);
+        };
+      
+        const handleClose = () => {
+          setAnchorEl(null);
+        };
+        console.log(params)
+        return (
+          <>
+          <Button ref={buttonRef} startIcon={<ThumbsUpDownIcon/>} color="success" onClick={handleClick}></Button>
+          <Popover
+            id={params["requestor"]+"-"+params["amount"]}
+            open={open}
+            anchorEl={buttonRef.current}
+            onClose={handleClose}
+            transformOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+          >
+            <Button size="small" color="success" variant="contained" onClick={accept}>Accept</Button>
+            <Button size="small" color="error" variant="contained" onClick={decline}>Decline</Button>
+          </Popover>
+          </>
+        )
+      }
+    }
   ];
   const rows = [
     { id: 1, requestor: 'Snow', message: 'This is a test message!', amount: 35.00 },
@@ -111,36 +158,6 @@ const SellerDashoard = (ctx) => {
   ];
 
 
-  let formattedTime = ""
-  if (sellerRequestData) {
-    const date = new Date(sellerRequestData["requestDate"]);
-    formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
-  }
-
-  const payoutButton = () =>{
-    fetch('/api/artist/payout').then((response) => {
-      if (response.ok) {
-        fetch('/api/artist/request').then((requestResponse) => {
-          requestResponse.json().then((sellerRequest) => {
-            setSellerRequestData(sellerRequest);
-          });
-        });
-      }
-    });
-  }
-
-  const requestButton = () => {
-    fetch('/api/artist/newRequest').then((response) => {
-      if (response.ok) {
-        fetch('/api/artist/request').then((requestResponse) => {
-          requestResponse.json().then((sellerRequest) => {
-            setSellerRequestData(sellerRequest);
-            getData();
-          });
-        });
-      }
-    });
-  }
 
   return (
     <>
@@ -154,8 +171,7 @@ const SellerDashoard = (ctx) => {
         </Box>
       ) : (
         <Layout user={user} loading={isLoading}>
-          <Grid container spacing={2} sx={{ padding: 4 }}>
-
+          <Grid container >
             {(Object.keys(sellerData).length > 0 ? (
               <>
                 <Grid item container sx={{ textAlign: "center" }}>
@@ -172,95 +188,7 @@ const SellerDashoard = (ctx) => {
                   <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
                   </Grid>
                 </Grid>
-                {(Object.keys(sellerRequestData).length > 0 ? (
-                  <>
-                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
-                      <Card sx={{ minWidth: 275, paddingTop: 2 }}>
-                        <CardContent>
-                          <Typography variant="h5" gutterBottom>
-                            Request Status
-                          </Typography>
-                          {(sellerRequestData["accepted"] ? (
-                            <Typography variant="body2" color="text.warning" component="div">Accepted</Typography>
-                          ) : (
-                            <Typography variant="h6" color="text.warning" component="div">Pending</Typography>
-                          ))}
-                          <Typography variant="body2" color="text.secondary" component="div">Request submitted on {formattedTime ?? ''}</Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button color="primary" href="https://discord.gg/SAGBA3uTEF" target="_blank" size="small">Contact Us On Discord</Button>
-                        </CardActions>
-                      </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                      {(sellerRequestData["accepted"] ? (
-                        <>
-  
-                          {(isOnboarded ? (<>
-                            <Button sx={{ width: "50%" }} color="primary" variant="contained" href={onBoardUrl}>Payout Settings</Button>
-                            <Button sx={{ width: "50%" }} color="secondary" variant="contained">Payout Portal</Button>
-                            </>
-                          ) : (
-                            <>
-                            <Button sx={{ width: "50%" }} href={onBoardUrl} color="secondary" variant="contained">Payout Onboarding</Button>
-                            <Button sx={{ width: "50%" }} color="secondary" variant="contained" disabled>Payout Portal</Button>
-                            </>
-                          ))}
-                          
-
-                          <Grid item container xs={12} sm={12} sx={{paddingTop:2}}>
-
-                            <AppBar position="static">
-                              <Tabs
-                                value={tabValue}
-                                onChange={handleChange}
-                                indicatorColor="secondary"
-                                textColor="inherit"
-                                variant="fullWidth"
-                                aria-label="full width tabs example"
-                              >
-                                <Tab label="New Requests" {...a11yProps(0)} />
-                                <Tab label="Portfolio" {...a11yProps(1)} />
-                                <Tab label="Ongoing Requests" {...a11yProps(2)} />
-                              </Tabs>
-                            </AppBar>
-                            <SwipeableViews
-                              index={tabValue}
-                              onChangeIndex={handleChangeIndex}
-                            >
-                              <TabPanel value={tabValue} index={0} dir={theme.direction}>
-                                <DataGrid
-                                  rows={rows}
-                                  columns={columns}
-                                  initialState={{
-                                    pagination: {
-                                      paginationModel: { page: 0, pageSize: 5 },
-                                    },
-                                  }}
-                                  pageSizeOptions={[5, 10]}
-                                  sx={{ width: '100%' }}
-                                />
-                              </TabPanel>
-                              <TabPanel value={tabValue} index={1} dir={theme.direction}  >
-                                <EditableArtistPortfolio artistId={sellerData["id"]}></EditableArtistPortfolio>
-                              </TabPanel>
-                              <TabPanel value={tabValue} index={2} dir={theme.direction}>
-                                Item Three
-                              </TabPanel>
-                            </SwipeableViews>
-                          </Grid>
-                        </>
-                      ) : (
-<></>                      ))}
-                    </Grid>
-                  </>
-                ) : (
-                  <>
-                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
-                      {(Object.keys(sellerRequestData).length==0 || sellerRequestData["accepted"]==false ? (<><Button sx={{ width: "50%" }} color="secondary" onClick={requestButton} variant="contained">Request Artist Access</Button></>):(<></>))}
-                    </Grid>
-                  </>
-                ))}
+                <ArtistDashboardRequest/>
               </>
 
             ) : (

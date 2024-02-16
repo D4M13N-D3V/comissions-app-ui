@@ -22,7 +22,7 @@ const Layout = ({ user, loading = false, children }: LayoutProps) => {
 
       <style jsx>{`
         .container {
-          max-width: 42rem;
+          max-width: 82rem;
           margin: 1.5rem auto;
         }
       `}</style>

@@ -12,6 +12,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@lupus-ai/mui-currency-textfield": "^1.0.3",
     "@mui/icons-material": "^5.15.6",
+    "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.6",
     "@mui/x-data-grid": "^6.19.4",
     "@mui/x-date-pickers": "^6.19.4",

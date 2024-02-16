@@ -8,18 +8,22 @@ import { CircularProgress, ImageListItemBar } from '@mui/material';
 
 import { IconButton } from '@mui/material';
 
-const EditableArtistPortfolioImage = ({artistId,itemId}) => {
+const EditableArtistPortfolioImage = ({artistId,itemId,reload}) => {
   const [loaded, setLoaded] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const handleImageLoaded = () => {
     setLoaded(true);
   };
     
 
   const deleteButton = () => {
+    setDeleting(true);
     fetch('/api/artist/portfolio/'+itemId+"/delete", {
       method: 'DELETE'
-    }).then(response => 
-        window.location.reload());
+    }).then(response => {
+          reload().then(data => {
+          })
+    })
   }
 
     return (

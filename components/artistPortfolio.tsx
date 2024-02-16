@@ -13,7 +13,7 @@ const ArtistPortfolio = ({artistId}) => {
       setPortfolioData(data);
       setLoading(false);
     }
-    ////console.log(portfolioData)
+    (portfolioData)
     getData();
   }, []);
     return (
