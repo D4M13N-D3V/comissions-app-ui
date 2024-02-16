@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
-import { ArrowLeftOutlined, ArrowRightRounded, OpenInNew } from '@mui/icons-material';
+import { ArrowLeftOutlined, ArrowRightRounded, Logout, OpenInNew } from '@mui/icons-material';
 
 const logoStyle = {
   width: '140px',
@@ -139,16 +139,29 @@ function AppAppBar({ user }: AppAppBarProps) {
               }}
             >
               {(user ? (
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    size="small"
-                    component="a"
-                    href="/api/auth/login"
-                    startIcon={<OpenInNew  />}
-                  >
-                    Dashboard
-                  </Button>
+                <>
+                <Button color="primary">{user.nickname}</Button>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="small"
+                  component="a"
+                  href="/api/auth/login"
+                  startIcon={<OpenInNew  />}
+                >
+                  Dashboard
+                </Button>
+                <Button
+                  color="error"
+                  variant="outlined"
+                  size="small"
+                  component="a"
+                  href="/api/auth/logout"
+                  startIcon={<Logout  />}
+                >
+                  Logout
+                </Button>
+                </>
               ) : (
                 <Box>
                   <Button
