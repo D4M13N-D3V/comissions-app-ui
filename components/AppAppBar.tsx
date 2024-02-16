@@ -63,7 +63,7 @@ function AppAppBar({ user }: AppAppBarProps) {
               alignItems: 'center',
               justifyContent: 'space-between',
               flexShrink: 0,
-              borderRadius: '999px',
+              borderRadius: '10px',
               bgcolor:
                 theme.palette.mode === 'light'
                   ? 'rgba(255, 255, 255, 0.4)'
