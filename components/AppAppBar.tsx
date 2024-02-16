@@ -66,7 +66,7 @@ function AppAppBar({ user }: AppAppBarProps) {
               borderRadius: '10px',
               bgcolor:
                 theme.palette.mode === 'light'
-                  ? 'rgba(255, 255, 255, 0.4)'
+                  ? 'rgba(255, 255, 255, 0.6)'
                   : 'rgba(0, 0, 0, 0.4)',
               backdropFilter: 'blur(24px)',
               maxHeight: 40,
