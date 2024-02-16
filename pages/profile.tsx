@@ -1,5 +1,4 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import Layout from "../components/layout";
 import { User } from "../interfaces";
 
 type ProfileCardProps = {
@@ -23,9 +22,9 @@ const ProfileCard = ({ user }: ProfileCardProps) => {
 
 const Profile = ({ user, isLoading }) => {
   return (
-    <Layout user={user} loading={isLoading}>
-      {isLoading ? <>Loading</> : <ProfileCard user={user} />}
-    </Layout>
+    <>
+          {isLoading ? <>Loading</> : <ProfileCard user={user} />}
+</>
   );
 };
 

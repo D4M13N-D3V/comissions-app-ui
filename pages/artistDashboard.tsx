@@ -3,7 +3,6 @@ import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Layout from "../components/layout";
 import { Grid, Button, Typography, TextField, Box, CircularProgress, IconButton } from "@mui/material";
 import { useState, useEffect,useRef } from "react";
 import Card from '@mui/material/Card';
@@ -170,36 +169,33 @@ const SellerDashoard = (ctx) => {
           <CircularProgress  />
         </Box>
       ) : (
-        <Layout user={user} loading={isLoading}>
-          <Grid container >
-            {(Object.keys(sellerData).length > 0 ? (
-              <>
-                <Grid item container sx={{ textAlign: "center" }}>
-                  <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
-                    <Button color="primary" variant="contained" href="../">
-                      Back
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={8} sx={{ textAlign: "center" }}>
-                    <Typography variant="h4">
-                      Artist Dashboard
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
-                  </Grid>
+        <Grid container >
+          {(Object.keys(sellerData).length > 0 ? (
+            <>
+              <Grid item container sx={{ textAlign: "center" }}>
+                <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
+                  <Button color="primary" variant="contained" href="../">
+                    Back
+                  </Button>
                 </Grid>
-                <ArtistDashboardRequest/>
-              </>
+                <Grid item xs={12} sm={8} sx={{ textAlign: "center" }}>
+                  <Typography variant="h4">
+                    Artist Dashboard
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sm={2} sx={{ textAlign: "center" }}>
+                </Grid>
+              </Grid>
+              <ArtistDashboardRequest/>
+            </>
 
-            ) : (
-              <></>
-            ))}
-            <Grid item container xs={12} sm={12}>
-            </Grid>
+          ) : (
+            <></>
+          ))}
+          <Grid item container xs={12} sm={12}>
           </Grid>
-        </Layout>)}
-    </>
-  );
-};
-
+        </Grid>
+  )};
+</>);
+} 
 export default SellerDashoard;
