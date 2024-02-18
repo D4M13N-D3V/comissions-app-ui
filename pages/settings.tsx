@@ -1,5 +1,5 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
-import Layout from "../components/layout";
+import Layout from "../components/OLd/layout";
 import { Grid, Button, Typography, TextField, Box } from "@mui/material";
 
 const Settings = () => {

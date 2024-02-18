@@ -146,7 +146,7 @@ function AppAppBar({ user }: AppAppBarProps) {
                   variant="contained"
                   size="small"
                   component="a"
-                  href="/api/auth/login"
+                  href="/dashboard"
                   startIcon={<OpenInNew  />}
                 >
                   Dashboard
