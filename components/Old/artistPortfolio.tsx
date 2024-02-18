@@ -22,7 +22,8 @@ const ArtistPortfolio = ({masonry,columns,artistId}) => {
             <Typography variant="h4" sx={{textAlign:"center"}}>
               Loading
             </Typography>
-          <CircularProgress sx={{paddingTop:5}} />
+            <Box sx={{paddingTop:"2%"}}/>
+          <CircularProgress />
           </Box>
           ) : 
         (

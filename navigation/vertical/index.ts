@@ -3,12 +3,7 @@ import Login from 'mdi-material-ui/Login'
 import Table from 'mdi-material-ui/Table'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
-import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
-import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
-import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
-import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
-import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
 // ** Type import
 import { VerticalNavItemsType } from '../../core/layouts/types'
@@ -29,7 +24,6 @@ const navigation = (): VerticalNavItemsType => {
   }, []);
 
   if(isStripeOnboarded){
-
     return [
       {
         sectionTitle: 'General'
@@ -42,10 +36,15 @@ const navigation = (): VerticalNavItemsType => {
       {
         title: 'Account Settings',
         icon: Settings,
-        path: '/artist/settings'
+        path: '/dashboard/settings'
       },
       {
         sectionTitle: 'Artist'
+      },
+      {
+        title: 'Shop Settings',
+        icon: SettingsApplicationsIcon,
+        path: '/dashboard/artist/artistsettings'
       },
       {
         title: 'Payout Portal',
@@ -74,7 +73,12 @@ const navigation = (): VerticalNavItemsType => {
         title: 'Dashboard',
         icon: HomeOutline,
         path: '/dashboard'
-      }
+      },
+      {
+        title: 'Account Settings',
+        icon: Settings,
+        path: '/dashboard/settings'
+      },
     ]
   }
 }

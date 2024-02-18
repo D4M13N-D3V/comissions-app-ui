@@ -14,6 +14,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Slider from '@mui/material/Slider';
 import ArtistPortfolio from '../../../components/Old/artistPortfolio';
+import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
+import Box from '@mui/material/Box';
 
 const Profile = () => {
 
@@ -37,8 +39,8 @@ const Profile = () => {
 
 
     const [bioColor, setBioColor] = useState('rgb(186, 186, 186)');
-    const [bioBgColor, setBioBgColor] = useState('rgb(103, 97, 97)');
-    const [bioHeaderColor, setBioHeaderColor] = useState('rgb(255, 255, 255)');
+    const [bioBgColor, setBioBgColor] = useState('rgb(78, 73, 73)');
+    const [bioHeaderColor, setBioHeaderColor] = useState('rgb(194, 187, 187)');
     const [bioHeaderIsImage, setBioHeaderImage] = useState(false);
     const [bioHeaderImageUrl, setBioHeaderImageUrl] = useState('');
     const [bioHeaderText, setBioHeaderText] = useState('Biography');
@@ -61,11 +63,47 @@ const Profile = () => {
         'h1', // Size 6
     ][bioSize - 1] || 'h6';
 
+    const [portfolioHeaderColor, setPortfolioHeaderColor] = useState('rgb(194, 187, 187)');
+    const [portfolioHeaderIsImage, setPortfolioHeaderImage] = useState(false);
+    const [portfolioHeaderImageUrl, setPortfolioHeaderImageUrl] = useState('');
+    const [portfolioHeaderText, setPortfolioHeaderText] = useState('Portfolio');
+    const [portfolioHeaderSize, setPortfolioHeaderSize] = useState(3);
     const [portfolioBgColor, setPortfolioBgColor] = useState('rgb(78, 73, 73)');
     const [portfolioColumns, setPotrfolioColumns] = useState(2);
     const [portfolioWoven, setPortfolioWoven] = useState(true);     
     const [portfolioShouldScroll, setPortfolioShouldScroll] = useState(true);
     const [portfolioSize, setPortfolioSize] = useState(25);
+    const portfolioVariant = [
+        'h6', // Size 1
+        'h5', // Size 2
+        'h4', // Size 3
+        'h3', // Size 4
+        'h2', // Size 5
+        'h1', // Size 6
+    ][portfolioHeaderSize - 1] || 'h6';
+
+
+
+
+    const [requestHeaderColor, setRequestHeaderColor] = useState('rgb(194, 187, 187)');
+    const [requestHeaderIsImage, setRequestHeaderImage] = useState(false);
+    const [requestHeaderImageUrl, setRequestHeaderImageUrl] = useState('');
+    const [requestHeaderText, setRequestHeaderText] = useState('Requests');
+    const [requestHeaderSize, setRequestHeaderSize] = useState(3);
+    const [requestBgColor, setRequestBgColor] = useState('rgb(78, 73, 73)');
+    const [requestTermsTextColor, setRequestTermsTextColor] = useState('rgb(194, 187, 187)');
+    const [requestButtonBGColor, setRequestButtonBGColor] = useState('rgb(101, 97, 97)');
+    const [requestButtonTextColor, setRequestButtonTextColor] = useState('rgb(194, 187, 187)');
+    const [requestHoverButtonBGColor, setRequestHoverButtonBGColor] = useState('rgb(98, 98, 98)');
+    const [requestHoverButtonTextColor, setRequestHoverButtonTextColor] = useState('rgb(194, 187, 187)');
+    const requestVariant = [
+        'h6', // Size 1
+        'h5', // Size 2
+        'h4', // Size 3
+        'h3', // Size 4
+        'h2', // Size 5
+        'h1', // Size 6
+    ][requestHeaderSize - 1] || 'h6';
 
     const getData = async () => {
       const profileResponse = await fetch('/api/artist/profile');
@@ -152,6 +190,66 @@ const Profile = () => {
         setPortfolioSize(newValue)
     }
 
+    const handlePortfolioHeaderTextChange = (e) => {
+        setPortfolioHeaderText(e.target.value)
+    }
+
+    const handlePortfolioHeaderImageUrl = (e) => {
+        setPortfolioHeaderImageUrl(e.target.value)
+    }
+    const handlePortfolioHeaderImageToggle = (e) => {
+        setPortfolioHeaderImage(e.target.checked)
+    };
+
+    const handlePortfolioHeaderSize = (e, newValue) => {
+        setPortfolioHeaderSize(newValue)
+    }
+    const handlePortfolioHeaderColorChange = (newValue) => {
+        setPortfolioHeaderColor(newValue)
+    }
+
+
+
+
+
+    const handleRequestBgColor = (newValue) => {
+        setRequestBgColor(newValue)
+    }
+
+    const handleRequestHeaderTextChange = (e) => {
+        setRequestHeaderText(e.target.value)
+    }
+
+    const handleRequestHeaderImageUrl = (e) => {
+        setRequestHeaderImageUrl(e.target.value)
+    }
+    const handleRequestHeaderImageToggle = (e) => {
+        setRequestHeaderImage(e.target.checked)
+    };
+
+    const handleRequestHeaderSize = (e, newValue) => {
+        setRequestHeaderSize(newValue)
+    }
+    const handleRequestHeaderColorChange = (newValue) => {
+        setRequestHeaderColor(newValue)
+    }
+    const handleRequestTermsTextColorChange = (newValue) => {
+        setRequestTermsTextColor(newValue)
+    }
+    const handleRequestButtonBGColorChange = (newValue) => {
+        setRequestButtonBGColor(newValue)
+    }
+    const handleRequestButtonTextColorChange = (newValue) => {
+        setRequestButtonTextColor(newValue)
+    }
+    const handleRequestHoverButtonBGColorChange = (newValue) => {
+        setRequestHoverButtonBGColor(newValue)
+    }
+    const handleRequestHoverButtonTextColorChange = (newValue) => {
+        setRequestHoverButtonTextColor(newValue)
+    }
+
+
   return (
     <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
@@ -164,7 +262,7 @@ const Profile = () => {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <Button variant="contained" size="large">
+                            <Button color="success" variant="contained" size="large">
                                 Save
                             </Button>
                         </Grid>
@@ -232,6 +330,7 @@ const Profile = () => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={2}>
+                                        
                                         <Grid item xs={12} md={12}>
                                             <TextField disabled={bioHeaderIsImage} variant="outlined" fullWidth label="Header Text" onChange={handleBioHeaderTextChange} value={bioHeaderText} size="small"></TextField>
                                         </Grid>
@@ -243,7 +342,7 @@ const Profile = () => {
                                         </Grid>
                                         <Grid item xs={12} md={12}>
                                             <MuiColorInput disabled={bioHeaderIsImage} label="Header Text Color" fullWidth value={bioHeaderColor} onChange={handleBioHeaderColorChange} />
-                                        </Grid>
+                                        </Grid> 
                                         <Grid item xs={12} md={12}>
                                             <MuiColorInput label="Background Color" fullWidth value={bioBgColor} onChange={handleBioBgColorChange} />
                                         </Grid>
@@ -280,6 +379,26 @@ const Profile = () => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={2}>
+                                        <Grid item xs={12} md={12}>
+                                            <TextField disabled={portfolioHeaderIsImage} variant="outlined" fullWidth label="Header Text" onChange={handlePortfolioHeaderTextChange} value={portfolioHeaderText} size="small"></TextField>
+                                        </Grid>
+                                        <Grid item xs={12} md={10}>
+                                            <TextField variant="outlined" fullWidth label="Header Image Url" size="small" value={portfolioHeaderImageUrl} onChange={handlePortfolioHeaderImageUrl}></TextField>
+                                        </Grid>
+                                        <Grid item xs={12} md={2}>
+                                            <Switch checked={portfolioHeaderIsImage} onChange={handlePortfolioHeaderImageToggle} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput disabled={portfolioHeaderIsImage} label="Header Text Color" fullWidth value={portfolioHeaderColor} onChange={handlePortfolioHeaderColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={5}>
+                                            <Typography variant="body1" >
+                                                Header Size
+                                            </Typography>   
+                                        </Grid>
+                                        <Grid item xs={12} md={7}> 
+                                            <Slider disabled={portfolioHeaderIsImage}  value={portfolioHeaderSize} onChange={handlePortfolioHeaderSize} aria-label="Size" defaultValue={6} step={1} marks min={1} max={6} />
+                                        </Grid>
                                         <Grid item xs={12} md={12}>
                                             <MuiColorInput label="Background Color" fullWidth value={portfolioBgColor} onChange={handlePortfolioBgColor} />
                                         </Grid>
@@ -320,6 +439,59 @@ const Profile = () => {
                             </Accordion>
                         </Grid>
 
+                        <Grid item xs={12} md={12}>
+                            <Accordion defaultExpanded>
+                                <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1-content"
+                                >
+                                <Typography>Requests</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} md={12}>
+                                            <TextField disabled={requestHeaderIsImage} variant="outlined" fullWidth label="Header Text" onChange={handleRequestHeaderTextChange} value={requestHeaderText} size="small"></TextField>
+                                        </Grid>
+                                        <Grid item xs={12} md={10}>
+                                            <TextField variant="outlined" fullWidth label="Header Image Url" size="small" value={requestHeaderImageUrl} onChange={handleRequestHeaderImageUrl}></TextField>
+                                        </Grid>
+                                        <Grid item xs={12} md={2}>
+                                            <Switch checked={requestHeaderIsImage} onChange={handleRequestHeaderImageToggle} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput disabled={requestHeaderIsImage} label="Header Text Color" fullWidth value={requestHeaderColor} onChange={handleRequestHeaderColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={5}>
+                                            <Typography variant="body1" >
+                                                Header Size
+                                            </Typography>   
+                                        </Grid>
+                                        <Grid item xs={12} md={7}> 
+                                            <Slider disabled={requestHeaderIsImage}  value={requestHeaderSize} onChange={handleRequestHeaderSize} aria-label="Size" defaultValue={6} step={1} marks min={1} max={6} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Background Color" fullWidth value={requestBgColor} onChange={handleRequestBgColor} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Terms Text Color" fullWidth value={requestTermsTextColor} onChange={handleRequestTermsTextColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Button BG Color" fullWidth value={requestButtonBGColor} onChange={handleRequestButtonBGColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Button Text Color" fullWidth value={requestButtonTextColor} onChange={handleRequestButtonTextColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Button Hover BG Color" fullWidth value={requestHoverButtonBGColor} onChange={handleRequestHoverButtonBGColorChange} />
+                                        </Grid>
+                                        <Grid item xs={12} md={12}>
+                                            <MuiColorInput label="Button Hover Text Color" fullWidth value={requestHoverButtonTextColor} onChange={handleRequestHoverButtonTextColorChange} />
+                                        </Grid>
+                                    </Grid>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Grid>
+
                     </Grid>
                 </CardContent>
             </Card>
@@ -354,8 +526,18 @@ const Profile = () => {
                                         </CardContent>
                                     </Card>
                                 </Grid>
-                                <Grid item xs={12} md={12} sx={{textAlign:"center", marginTop:"2%"}}>
+                                <Grid item xs={12} md={12} sx={{ marginTop:"2%"}}>
                                     <Card sx={{backgroundColor:portfolioBgColor}}>
+                                        <Box sx={{textAlign:"center", paddingTop:"2%"}}>
+                                            {(portfolioHeaderIsImage) ? (
+                                            <img src={portfolioHeaderImageUrl} alt="Header Image"  />
+                                            ) : (
+                                                <Typography  sx={{paddingBottom:"2%"}} variant={portfolioVariant}  color={portfolioHeaderColor}>
+                                                    {portfolioHeaderText}
+                                                </Typography>
+                                            )}              
+
+                                        </Box>
                                         {(portfolioShouldScroll)?(
                                             <CardContent sx={{height:`${portfolioSize}rem`, overflowY:"scroll",}}>
                                                 {(profileData ? (
@@ -369,6 +551,41 @@ const Profile = () => {
                                                 ):null)}
                                             </CardContent>
                                         )}
+                                    </Card>
+                                </Grid>
+                                <Grid xs={12} md={12} sx={{ marginTop:"2%"}}>
+                                    <Card sx={{backgroundColor:requestBgColor}}>
+                                        <CardContent>
+                                            <Grid container>
+                                                <Grid item xs={12} md={12} sx={{textAlign:"center"}}>
+                                                    {(requestHeaderIsImage) ? (
+                                                    <img src={requestHeaderImageUrl} alt="Header Image"  />
+                                                    ) : (
+                                                        <Typography sx={{paddingBottom:"2%"}} variant={requestVariant}  color={requestHeaderColor}>
+                                                            {requestHeaderText}
+                                                        </Typography>
+                                                    )}              
+                                                </Grid>
+                                                <Grid item xs={12} md={12}  sx={{textAlign:"center"}}>
+                                                    <Typography variant="body1" color={requestTermsTextColor}>
+                                                       TERMS
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={12} sx={{textAlign:"center"}}>
+                                                    <Typography color="white" variant="body2">By clicking the button below, you agree to the 
+                                                    terms and conditions.</Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={12} sx={{textAlign:"center"}}>
+                                                </Grid>
+                                                <Grid item xs={12} md={12} sx={{textAlign:"center",paddingTop:"2%"}}>
+                                                    <Button size="large" variant="contained" sx={{backgroundColor:requestButtonBGColor, color:requestButtonTextColor,
+                                                    ':hover': {
+                                                    bgcolor: requestHoverButtonBGColor, // theme.palette.primary.main
+                                                    color: requestHoverButtonTextColor,
+                                                    },}}>Agree And Start Request</Button>
+                                                </Grid>
+                                            </Grid>
+                                        </CardContent>
                                     </Card>
                                 </Grid>
                             </Grid>

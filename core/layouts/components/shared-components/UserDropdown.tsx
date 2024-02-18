@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -37,6 +37,17 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = () => {
   const { user, isLoading } = useUser();
 
+  const [appUser, setAppUser] = useState(null);
+
+  useEffect(() => {
+    getData()
+  }, []);
+
+  const getData = async () => { 
+    var userResponse = await fetch('/api/me');
+    var user = await userResponse.json();
+    setAppUser(user); 
+  }
   // ** States
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
 
@@ -69,7 +80,7 @@ const UserDropdown = () => {
   }
 
   return (
-    (!isLoading && user) ? (
+    (!isLoading && user && appUser) ? (
       <Fragment>
         <Badge
           overlap='circular'
@@ -100,10 +111,10 @@ const UserDropdown = () => {
                 badgeContent={<BadgeContentSpan />}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               >
-                <Avatar alt={user.nickname} src={user.picture} sx={{ width: '2.5rem', height: '2.5rem' }} />
+                <Avatar alt={appUser["displayName"]} src={user.picture} sx={{ width: '2.5rem', height: '2.5rem' }} />
               </Badge>
               <Box sx={{ display: 'flex', marginLeft: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-                <Typography sx={{ fontWeight: 600 }}>{user.nickname}</Typography>
+                <Typography sx={{ fontWeight: 600 }}>{appUser["displayName"]}</Typography>
                 <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
                   Welcome back!
                 </Typography>
@@ -111,41 +122,10 @@ const UserDropdown = () => {
             </Box>
           </Box>
           <Divider sx={{ mt: 0, mb: 1 }} />
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-            <Box sx={styles}>
-              <AccountOutline sx={{ marginRight: 2 }} />
-              Profile
-            </Box>
-          </MenuItem>
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-            <Box sx={styles}>
-              <EmailOutline sx={{ marginRight: 2 }} />
-              Inbox
-            </Box>
-          </MenuItem>
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-            <Box sx={styles}>
-              <MessageOutline sx={{ marginRight: 2 }} />
-              Chat
-            </Box>
-          </MenuItem>
-          <Divider />
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+          <MenuItem sx={{ p: 0 }} onClick={() => router.push("/dashboard/settings")}>
             <Box sx={styles}>
               <CogOutline sx={{ marginRight: 2 }} />
               Settings
-            </Box>
-          </MenuItem>
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-            <Box sx={styles}>
-              <CurrencyUsd sx={{ marginRight: 2 }} />
-              Pricing
-            </Box>
-          </MenuItem>
-          <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-            <Box sx={styles}>
-              <HelpCircleOutline sx={{ marginRight: 2 }} />
-              FAQ
             </Box>
           </MenuItem>
           <Divider />

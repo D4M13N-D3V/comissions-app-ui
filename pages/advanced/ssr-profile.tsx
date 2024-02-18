@@ -1,5 +1,5 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
-import Layout from "../../components/OLd/layout";
+import Layout from "../../components/Old/layout";
 import { User } from "../../interfaces";
 
 type ProfileProps = {

@@ -27,7 +27,7 @@ const EditableArtistPortfolioImage = ({artistId,itemId,reload}) => {
   }
 
     return (
-        <ImageListItem key={itemId } sx={{maxWidth:300, maxHeight:300, overflow:"hidden"}}>
+        <ImageListItem key={itemId } >
         <img
           srcSet={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
           src={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}

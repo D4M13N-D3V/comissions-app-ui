@@ -7,7 +7,7 @@ const columns: GridColDef[] = [
   { field: 'artist', headerName: 'Artist', width: 130 },
   { field: 'status', headerName: 'Status', width: 130 },
   { field: 'action', headerName: 'Action', width: 180, renderCell: (params) => {
-    return (<Button variant="outlined" color="primary" fullWidth>View More</Button>);
+    return (<Button variant="outlined" color="secondary" fullWidth>View More</Button>);
   }},
 ];
 
