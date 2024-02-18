@@ -29,6 +29,7 @@ import Orders from '../../components/Orders'
 const Dashboard = () => {
   const [profileData, setSellerProfileData] = useState(null);
   const [requestData, setSellerRequestData] = useState(null);
+  const [onboardData, setOnboardedData] = useState(false);
 
   const [onboarding, setOnboarding] = useState(false);
   const [onboarded, setOnboarded] = useState(false);
@@ -44,6 +45,9 @@ const Dashboard = () => {
     const requestResponse = await fetch('/api/artist/request');
     const sellerRequest = await requestResponse.json();
     setSellerRequestData(sellerRequest);
+    const onboardedResponse = await fetch('/api/artist/onboarded');
+    const onboardedData = await onboardedResponse.json();
+    setOnboardedData(onboardedData["onboarded"]);
     setTimeout(getData, 5000); // Poll every 5 seconds (adjust as needed)
 
 
@@ -80,20 +84,21 @@ const Dashboard = () => {
         </Grid>
 
     
-        {( onboarding==true && onboarded==false) ? ( 
+        {( onboarding==true && onboardData==false ) ? ( 
         <Grid item xs={12} md={6}>
           <Onboarding />
         </Grid>
         ):(
-          (onboarded) ? (
+          (onboarding) ? (
             <Grid item xs={12} md={6}>
               <Card sx={{textAlign:"center", width:"100%"}}>
                 <CardContent>
                   <Grid container>
-                    <Grid item xs={12} md={12}>
-                      <Typography>
-                        THIS IS A TEST
-                      </Typography>
+                    <Grid item xs={12} md={6}>
+                      <Button color="secondary" sx={{width:"90%"}} variant="contained">Manage Portfolio</Button>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Button color="primary" href="/dashboard/artist/pagesettings" fullWidth sx={{width:"90%"}} variant="contained">Design Store Page</Button>
                     </Grid>
                   </Grid>
                 </CardContent>
