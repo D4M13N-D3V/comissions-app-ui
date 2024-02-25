@@ -16,7 +16,7 @@ export default withApiAuthRequired(async function handler(req, res) {
   const { accessToken } = await getAccessToken(req, res);
   const { id } = req.query;
 
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/SellerProfile/Portfolio/'+id, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/Artist/Portfolio/'+id, {
     method: 'DELETE',
     headers: {
       "Authorization": `Bearer ${accessToken}`

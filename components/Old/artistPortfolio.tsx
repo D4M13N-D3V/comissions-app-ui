@@ -5,10 +5,11 @@ import ArtistPortfolioImage from './artistPortfolioImage';
 
 const ArtistPortfolio = ({masonry,columns,artistId}) => {
   const [portfolioData, setPortfolioData] = useState([]);
+  const [profileId, setArtistId] = useState(artistId)
   const [loading, setLoading] = useState(true); // State for loading indicator
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/api/discovery/artist/'+artistId+'/portfolio');
+      const response = await fetch('/api/discovery/artist/'+profileId+'/portfolio');
       const data = await response.json();
       setPortfolioData(data);
       setLoading(false);
@@ -28,15 +29,15 @@ const ArtistPortfolio = ({masonry,columns,artistId}) => {
           ) : 
         (
           (masonry) ? (
-          <ImageList variant="masonry" gap={8} cols={columns} sx={{overflowY:"scroll", maxWidth:"100%"}} >
+            <ImageList variant='masonry' cols={columns}  sx={{  width:"100%" }}>
             {portfolioData.map((item) => (
-              <ArtistPortfolioImage artistId={artistId} itemId={item.id} />
+              <ArtistPortfolioImage artistId={profileId} itemId={item.id} />
             ))}
           </ImageList>
           ):(
-            <ImageList gap={8} cols={columns} >
-              {portfolioData.map((item) => (
-                <ArtistPortfolioImage artistId={artistId} itemId={item.id} />
+            <ImageList cols={columns}  sx={{  width:"100%" }}>
+            {portfolioData.map((item) => (
+                <ArtistPortfolioImage artistId={profileId} itemId={item.id} />
               ))}
             </ImageList>
           )

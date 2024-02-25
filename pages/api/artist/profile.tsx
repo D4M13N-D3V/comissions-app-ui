@@ -3,7 +3,7 @@ import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-a
 export default withApiAuthRequired(async function sellerProfile(req, res) {
   const { accessToken } = await getAccessToken(req, res);
   if(req.method !== 'GET') {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/SellerProfile', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/Artist', {
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json"
@@ -16,7 +16,7 @@ export default withApiAuthRequired(async function sellerProfile(req, res) {
       res.status(200).json(result);
   }
   else{
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/SellerProfile', {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/Artist', {
       headers: {
         "Authorization": `Bearer ${accessToken}`
       }

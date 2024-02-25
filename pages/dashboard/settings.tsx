@@ -1,10 +1,12 @@
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Grid, Typography } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import * as React from 'react';
 
 
 const ArtistSettings = () => {
@@ -13,6 +15,9 @@ const ArtistSettings = () => {
     const [displayName, setDisplayName] = useState("");
     const [biography, setBiography] = useState("");
     const [saved, setSaved] = useState(false);
+
+    const [loading, setLoading] = useState(true);
+
 
     const handleDisplayNameChange = (event) => {
         setDisplayName(event.target.value);
@@ -41,8 +46,15 @@ const ArtistSettings = () => {
         setDisplayName(user["displayName"])
         setBiography(user["biography"])
         setAppUser(user);
+        setLoading(false);
     }
     return (
+    <>
+        {(loading) ? (
+           <Box sx={{textAlign:"center"}}>
+                <CircularProgress />
+           </Box> 
+        ):(
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <Card>
@@ -61,14 +73,13 @@ const ArtistSettings = () => {
                             <Grid item xs={12} md={12} sx={{ paddingTop: "2%" }}>
                                 <TextField id="outlined-basic" label="Display Name" onChange={handleDisplayNameChange} variant="outlined" fullWidth value={displayName} />
                             </Grid>
-                            <Grid item xs={12} md={12} sx={{ paddingTop: "2%" }}>
-                                <TextField id="outlined-basic" multiline rows={5} label="Biography" onChange={handleBiographyChange} variant="outlined" value={biography} fullWidth />
-                            </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
             </Grid>
         </Grid>
+        )}
+    </>
     );
 };
 

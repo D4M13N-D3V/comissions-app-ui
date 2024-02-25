@@ -22,7 +22,7 @@ type HeaderProps = {
 };
 
 
-const settings = ['Seller Dashboard', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Artist Dashboard', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);

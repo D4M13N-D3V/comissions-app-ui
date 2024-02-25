@@ -36,12 +36,12 @@ const steps = [
 
 export default function Onboarding() {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [sellerRequestData, setSellerRequestData] = React.useState(null);
-  const [profileData, setSellerProfileData] = React.useState(null);
+  const [sellerRequestData, setArtistRequestData] = React.useState(null);
+  const [profileData, setArtistData] = React.useState(null);
   const [isStripeOnboarded, setIsStripeOnboarded] = React.useState(false);
   const [onBoardUrl, setOnBoardUrl] = React.useState("");
 
-
+  const [requestMessage, setRequestMessage] = React.useState("");
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -55,6 +55,10 @@ export default function Onboarding() {
     setActiveStep(0);
   };
 
+  const handleRequestMessage = (event) => {
+    setRequestMessage(event.target.value);
+  }
+
   const getData = async () => {
     const onboardCheckRequest = await fetch('/api/artist/onboarded', { method: "GET" });
     const onboardCheckResponse = await onboardCheckRequest.json();
@@ -64,23 +68,23 @@ export default function Onboarding() {
     setOnBoardUrl(onboardUrlResponse["onboardUrl"]);
     const response = await fetch('/api/artist/request');
     const sellerRequest = await response.json();
-    setSellerRequestData(sellerRequest);
+    setArtistRequestData(sellerRequest);
     const profileResponse = await fetch('/api/artist/profile');
     const sellerProfile = await profileResponse.json();
-    setSellerProfileData(sellerProfile);
-
-    setTimeout(getData, 5000); // Poll every 5 seconds (adjust as needed)
+    setArtistData(sellerProfile); // Poll every 5 seconds (adjust as needed)
   }
   React.useEffect(() => {
     getData();
+
+    setTimeout(getData, 30000);
   }, []);
 
   const requestButton = () => {
-    fetch('/api/artist/newRequest').then((response) => {
+    fetch('/api/artist/newRequest', {headers:{ "Content-Header":"application/json"},method:"POST",body:JSON.stringify(requestMessage)}).then((response) => {
       if (response.ok) {
         fetch('/api/artist/request').then((requestResponse) => {
           requestResponse.json().then((sellerRequest) => {
-            setSellerRequestData(sellerRequest);
+            setArtistRequestData(sellerRequest);
           });
         });
       }
@@ -119,7 +123,7 @@ export default function Onboarding() {
                             </Grid>
                         ):(
                             <Grid item xs={12} lg={12}>
-                                <TextField fullWidth rows={4} multiline label="Application Message" variant="outlined" />
+                                <TextField value={requestMessage} onChange={handleRequestMessage} fullWidth rows={4} multiline label="Application Message" variant="outlined" />
                             </Grid>
                         )}
                     </Grid>

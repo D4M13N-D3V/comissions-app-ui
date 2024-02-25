@@ -7,39 +7,78 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
 // ** Type import
 import { VerticalNavItemsType } from '../../core/layouts/types'
-import { BankTransfer, PageFirst } from 'mdi-material-ui'
+import { BankTransfer, Cart, Clipboard, PageFirst } from 'mdi-material-ui'
 import { DocumentScanner, FileOpen, Settings } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 
 const navigation = (): VerticalNavItemsType => {
   const [isStripeOnboarded, setIsStripeOnboarded] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const getData = async () => {
+    
     const onboardCheckRequest = await fetch('/api/artist/onboarded', { method: "GET" });
     const onboardCheckResponse = await onboardCheckRequest.json();
     setIsStripeOnboarded(onboardCheckResponse["onboarded"]);
+    
+    const artistProfileRequest = await fetch('/api/artist/profile', { method: "GET" });
+    const artistProfileResponse = await artistProfileRequest.json();
+    setProfileData(artistProfileResponse);  
+    
+    const userRequest = await fetch('/api/me', { method: "GET" });
+    const userResponse = await userRequest.json();
+    setUserData(userResponse);  
+    ////console.log(roleResponse)
   }
+
   useEffect(() => {
     getData();
   }, []);
 
-  if(isStripeOnboarded){
-    return [
-      {
-        sectionTitle: 'General'
-      },
-      {
-        title: 'Dashboard',
-        icon: HomeOutline,
-        path: '/dashboard'
-      },
-      {
-        title: 'Account Settings',
-        icon: Settings,
-        path: '/dashboard/settings'
-      },
+  var result = [
+    {
+      sectionTitle: 'Admin'
+    },
+    {
+      title: 'Artist Requests',
+      icon: Clipboard,
+      path: '/dashboard/admin/requests'
+    },
+    {
+      sectionTitle: 'General'
+    },
+    {
+      title: 'Dashboard',
+      icon: HomeOutline,
+      path: '/dashboard'
+    },
+    {
+      title: 'Account Settings',
+      icon: Settings,
+      path: '/dashboard/settings'
+    },
+    {
+      title: 'Your Requests',
+      icon: Cart,
+      path: '/dashboard/requests'
+    }
+  ];
+
+  if (isStripeOnboarded) {
+    result.push(
       {
         sectionTitle: 'Artist'
+      },
+      {
+        title: 'Incoming Requests',
+        icon: CubeOutline,
+        path: '/dashboard/artist/requests'
+      },
+      {
+        title: 'Payments/Payouts',
+        icon: BankTransfer,
+        path: '/dashboard/payout'
       },
       {
         title: 'Shop Settings',
@@ -47,40 +86,20 @@ const navigation = (): VerticalNavItemsType => {
         path: '/dashboard/artist/artistsettings'
       },
       {
-        title: 'Payout Portal',
-        icon: BankTransfer,
-        path: '/payoutportal'
-      },
-      {
         title: 'Page Settings',
         icon: DocumentScanner,
         path: '/dashboard/artist/pagesettings'
       },
       {
-        title: 'Preview Page',
+        title: 'Your Page',
         icon: FileOpen,
-        path: '/artist/pagesettings'
+        path: '/box/' + (userData ? userData["displayName"] : "")
       }
-    ]
+    );
   }
-  else{
 
-    return [
-      {
-        sectionTitle: 'General'
-      },
-      {
-        title: 'Dashboard',
-        icon: HomeOutline,
-        path: '/dashboard'
-      },
-      {
-        title: 'Account Settings',
-        icon: Settings,
-        path: '/dashboard/settings'
-      },
-    ]
-  }
+  return result;
 }
 
-export default navigation
+export default navigation;
+

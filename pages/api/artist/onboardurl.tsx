@@ -2,7 +2,7 @@ import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-a
 
 export default withApiAuthRequired(async function onboardUrl(req, res) {
   const { accessToken } = await getAccessToken(req, res);
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/SellerProfile/Onboard/Url', {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/Artist/Onboard/Url', {
     headers: {
       "Authorization": `Bearer ${accessToken}`
     }

@@ -1,33 +1,141 @@
 import * as React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
+import TextField from '@mui/material/TextField';
+import { Button, Typography } from '@mui/material';
+import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
+import { DateField } from '@mui/x-date-pickers/DateField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Chip from '@mui/material/Chip';
+import {Check, Refresh } from '@mui/icons-material';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'artist', headerName: 'Artist', width: 130 },
-  { field: 'status', headerName: 'Status', width: 130 },
-  { field: 'action', headerName: 'Action', width: 180, renderCell: (params) => {
-    return (<Button variant="outlined" color="secondary" fullWidth>View More</Button>);
-  }},
-];
+import dayjs from 'dayjs';
 
-const rows = [
-  { id: 1, artist:'Neroshi', status: 'Pending'},
-];
 
-export default function Orders() {
+export default function ServerPaginationGrid() {
+    const columns = [
+      { field: 'id', headerName: 'ID', flex: 0.1},
+      { field: 'status', headerName: 'Status', flex: 0.15,
+        renderCell: (params) => {
+            if(params.row.completed){
+                return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
+            }
+            else if(params.row.paid){
+                return <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
+            }
+            else if(params.row.accepted && params.row.paid==false){
+                return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
+            }
+            else if(params.row.accepted && params.row.paid){
+                return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="outlined" color="info" />
+            }
+            else if(params.row.declined){
+                return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
+            }
+            else{
+                return <Chip icon={<Refresh />} label="Pending" variant="outlined" color="secondary" />
+            }
+        }
+    },
+      { field: 'amount', headerName: 'Amount', flex: 0.1, renderCell: (params) => {
+        return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
+      }},
+      { field: 'requestDate', headerName: 'Request Date', flex:0.15, 
+        renderCell: (params) =>{
+
+            let formattedTime = ""
+            const date = new Date(params.row.requestDate);  
+            formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
+            return <DateField
+            size='small'
+            disabled
+            defaultValue={dayjs(params.row.requestDate)}
+            format="LL"
+          />
+        } } 
+    ];
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [requestCount, setRequestCount] = React.useState(null);  
+  const [requestData, setRequestData] = React.useState({});  
+  const [paginationModel, setPaginationModel] = React.useState({
+    page: 0,
+    pageSize: 5,
+  });
+
+
+  const getRequests = async () => {
+    setIsLoading(true);
+    const response = await fetch('/api/requests', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            completed: true, // Example query parameter
+            declined: true, // Example query parameter
+            accepted: true, // Example query parameter
+            paid: true, // Example query parameter
+            offset: paginationModel.page*paginationModel.pageSize, // Example query parameter
+            pageSize: paginationModel.pageSize
+        }),
+    });
+    const data = await response.json();
+    setRequestData(data);
+    setIsLoading(false);
+  }
+  const getRequestsCount = async () => {
+    const response = await fetch('/api/requestcount', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            completed: true, // Example query parameter
+            declined: true, // Example query parameter
+            accepted: true, // Example query parameter
+            paid: true, // Example query parameter
+            offset: paginationModel.page*paginationModel.pageSize, // Example query parameter
+            pageSize: paginationModel.pageSize
+        })
+    });
+    const data = await response.json();
+    setRequestCount(data);
+    setRowCountState((prevRowCountState) =>
+      data !== undefined
+        ? data
+        : prevRowCountState,
+    );
+    return data;
+  } 
+
+  // Some API clients return undefined while loading
+  // Following lines are here to prevent `rowCountState` from being undefined during the loading
+  const [rowCountState, setRowCountState] = React.useState(0);
+  React.useEffect(() => {
+    getRequests();
+     getRequestsCount();
+  }, [requestCount, setRowCountState,paginationModel]);
+
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%' }}>
+
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
-        rows={rows}
+      minHeight={"500px"}
+        rows={requestData}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
+        rowCount={rowCountState}
+        loading={isLoading}
+        pageSizeOptions={[5]}
+        paginationModel={paginationModel}
+        paginationMode="server"
+        onPaginationModelChange={setPaginationModel}
       />
+        </LocalizationProvider>
     </div>
   );
 }

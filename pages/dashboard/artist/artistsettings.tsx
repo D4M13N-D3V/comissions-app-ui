@@ -1,5 +1,5 @@
 import { useUser,withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { Grid, Typography } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import EditableArtistPortfolio from "../../../components/Old/editableArtistPortfolio";
@@ -8,9 +8,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
+import ArtistRequest from "../../../components/ArtistRequest";
+import Box from '@mui/material/Box';
 
 const ArtistSettings = () => {
   const {user, isLoading} = useUser();
+  const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -21,7 +24,7 @@ const ArtistSettings = () => {
     const [guidelines, setGuidelines] = useState("");
     const [saved, setSaved] = useState(false);
 
-  const [profileData, setSellerProfileData] = useState(null);
+  const [profileData, setArtistData] = useState(null);
 
   const handleDisplayNameChange = (event) => {
     setName(event.target.value);
@@ -64,13 +67,22 @@ const saveChanges = async () => {
     setSocial3(sellerProfile["socialMeidaLink3"]);
     setSocial4(sellerProfile["socialMeidaLink4"]);
     setGuidelines(sellerProfile["requestGuidelines"]);
-    setSellerProfileData(sellerProfile);
+    setArtistData(sellerProfile);
+    setLoading(false);
   }
 
   useEffect(() => {
       getData()
   }, []);
   return (
+    <>
+    {(loading) ? (
+        <Box sx={{textAlign:"center", paddingTop:"20%"}}>
+            <CircularProgress  />
+        </Box>
+    ):
+    (
+
     <Grid container spacing={2}>
     <Grid item xs={12} md={6}>
         <Card>
@@ -83,7 +95,7 @@ const saveChanges = async () => {
                         <Button variant="contained" onClick={saveChanges} color="success" fullWidth>{saved ? "Saved" : "Save Changes"}</Button>   
                     </Grid>
                     <Grid item xs={12} md={12} >
-                        <Grid container spacing={2} sx={{paddingTop:"2%"}}>
+                        <Grid container spacing={4} sx={{paddingTop:"2%"}}>
                             <Grid item xs={12} md={12} sx={{paddingTop:"2%"}}>
                                 <TextField id="outlined-basic" label="Shop Name" value={name} onChange={handleDisplayNameChange} size="small" variant="outlined" fullWidth />
                             </Grid>
@@ -93,7 +105,7 @@ const saveChanges = async () => {
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={12} >
-                        <Grid container spacing={2} sx={{paddingTop:"2%"}}>
+                        <Grid container spacing={4} sx={{paddingTop:"2%"}}>
                             <Grid item xs={12} md={6} sx={{paddingTop:"2%"}}>
                                 <TextField id="outlined-basic" label="Social Media 1" value={social1} onChange={handleSocial1Change} type="url" size="small" variant="outlined" fullWidth />
                             </Grid>
@@ -124,6 +136,8 @@ const saveChanges = async () => {
             </Card>
         </Grid>
     </Grid>
+    )}
+    </>
   );
 };
 

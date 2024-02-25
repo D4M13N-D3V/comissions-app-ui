@@ -6,12 +6,12 @@ import Box from '@mui/material/Box';
 
 
 const ArtistDashboardRequest = () => {
-    const [sellerRequestData, setSellerRequestData] = useState(null);
+    const [sellerRequestData, setArtistRequestData] = useState(null);
   
     const getData = async () => {
       const response = await fetch('/api/artist/request');
       const sellerProfile = await response.json();
-      setSellerRequestData(sellerProfile);
+      setArtistRequestData(sellerProfile);
     }
     useEffect(() => {
       getData();

@@ -15,7 +15,8 @@ import Pricing from '../components/Pricing';
 import BetaAccess from '../components/BetaAccess';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useUser, } from "@auth0/nextjs-auth0/client";
+import { getSession } from "@auth0/nextjs-auth0";
 const defaultTheme = createTheme({});
 
 interface ToggleCustomThemeProps {
@@ -68,11 +69,7 @@ export default function LandingPage() {
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   
   const { user, isLoading } = useUser();
-
-  const toggleCustomTheme = () => {
-    setShowCustomTheme((prev) => !prev);
-  };
-
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />

@@ -16,8 +16,8 @@ const ArtistPortfolioImage = ({artistId,itemId}) => {
     return (
       <ImageListItem key={itemId } >
         <img
-          srcSet={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
-          src={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Sellers/${artistId}/Portfolio/${itemId}`}
+          srcSet={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Artists/${artistId}/Portfolio/${itemId}`}
+          src={process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Artists/${artistId}/Portfolio/${itemId}`}
           alt={itemId}
           loading="lazy"
           style={{ filter: loaded ? 'blur(0)' : 'blur(10px)', backgroundColor:'grey' }}

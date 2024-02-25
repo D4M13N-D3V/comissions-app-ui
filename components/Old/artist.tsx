@@ -23,12 +23,12 @@ import { useEffect, useState } from "react";
 import { IconButton } from '@mui/material';
 
 const Artist = ({user, artistId}) => {
-  const [sellerData, setSellerData] = useState([]);
+  const [sellerData, setArtistData] = useState([]);
   useEffect(() => {
     const getData = async () => {
       const response = await fetch('/api/discovery/artist/'+artistId);
       const data = await response.json();
-      setSellerData(data);
+      setArtistData(data);
     }
     getData();
   }, []);

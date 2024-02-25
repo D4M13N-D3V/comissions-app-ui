@@ -21,6 +21,7 @@
     "apexcharts": "^3.45.2",
     "dayjs": "^1.11.10",
     "formidable": "^3.5.1",
+    "jwt-decode": "^4.0.0",
     "mdi-material-ui": "^7.8.0",
     "mui-color-input": "^2.0.2",
     "next": "latest",

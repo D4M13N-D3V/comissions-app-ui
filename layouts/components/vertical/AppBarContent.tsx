@@ -23,7 +23,7 @@ import { Settings } from '../../../core/context/settingsContext'
 import ModeToggler from '../../../core/layouts/components/shared-components/ModeToggler'
 import UserDropdown from '../../../core/layouts/components/shared-components/UserDropdown'
 import NotificationDropdown from '../../../core/layouts/components/shared-components/NotificationDropdown'
-
+import { useEffect, useState } from 'react'
 interface Props {
   hidden: boolean
   settings: Settings
@@ -38,7 +38,18 @@ const AppBarContent = (props: Props) => {
   // ** Hook
   const hiddenSm = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
-  return (
+  const [profileData, setProfileData] = useState(null);
+
+  const getData = async () => {
+    const artistProfileRequest = await fetch('/api/me', { method: "GET" });
+    const artistProfileResponse = await artistProfileRequest.json();
+    setProfileData(artistProfileResponse);  
+  }
+  
+  //console.log(profileData)
+  useEffect(() => {
+    getData();
+  }, []);  return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
         {hidden ? (
@@ -52,12 +63,13 @@ const AppBarContent = (props: Props) => {
         ) : null}
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
-
-        <NovuProvider subscriberId={'on-boarding-subscriber-id-123'} applicationIdentifier={'9SKjzgN_odAF'}>
+        {(profileData ? (
+        <NovuProvider subscriberId={profileData["id"]} applicationIdentifier={'9SKjzgN_odAF'}>
           <PopoverNotificationCenter colorScheme={'light'}>
             {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
           </PopoverNotificationCenter>
         </NovuProvider>
+        ):null)}
         <UserDropdown />
       </Box>
     </Box>

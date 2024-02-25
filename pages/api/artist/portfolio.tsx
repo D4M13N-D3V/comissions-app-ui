@@ -26,7 +26,7 @@ export default withApiAuthRequired(async function handler(req, res) {
     const file = files["newImage"]; // Assuming your file input field name is 'file'
     try {
       
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/SellerProfile/Portfolio', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/Artist/Portfolio', {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${accessToken}`,

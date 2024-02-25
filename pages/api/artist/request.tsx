@@ -2,7 +2,8 @@ import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-a
 
 export default withApiAuthRequired(async function products(req, res) {
   const { accessToken } = await getAccessToken(req, res);
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/SellerProfile/Request', {
+  ////console.log(accessToken)
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/Artist/Request', {
     headers: {
       "Authorization": `Bearer ${accessToken}`
     },
