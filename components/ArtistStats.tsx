@@ -85,7 +85,7 @@ const ArtistStats = ({profileData, stats}) => {
       />
       <CardContent sx={{ pt: theme => `${theme.spacing(3)} !important` }}>
         <Grid container spacing={[5, 0]}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={6} sm={3}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar
                 variant='rounded'
@@ -106,7 +106,7 @@ const ArtistStats = ({profileData, stats}) => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={6} sm={3}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar
                 variant='rounded'
@@ -127,7 +127,7 @@ const ArtistStats = ({profileData, stats}) => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={6} sm={3}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar
                 variant='rounded'
@@ -148,7 +148,7 @@ const ArtistStats = ({profileData, stats}) => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={6} sm={3}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Avatar
                 variant='rounded'

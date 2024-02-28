@@ -44,19 +44,8 @@ export default function ServerPaginationGrid() {
       { field: 'amount', headerName: 'Amount', flex: 0.1, renderCell: (params) => {
         return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
       }},
-      { field: 'requestDate', headerName: 'Request Date', flex:0.15, 
-        renderCell: (params) =>{
-
-            let formattedTime = ""
-            const date = new Date(params.row.requestDate);  
-            formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
-            return <DateField
-            size='small'
-            disabled
-            defaultValue={dayjs(params.row.requestDate)}
-            format="LL"
-          />
-        } } 
+      { field: 'requestDate', headerName: 'Request Date', flex:0.15, type: 'date' ,
+        valueGetter: (params) => { return new Date(params.row.requestDate); }} 
     ];
   const [isLoading, setIsLoading] = React.useState(true);
   const [requestCount, setRequestCount] = React.useState(null);  

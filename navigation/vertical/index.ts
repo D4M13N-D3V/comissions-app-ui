@@ -7,8 +7,8 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 
 // ** Type import
 import { VerticalNavItemsType } from '../../core/layouts/types'
-import { BankTransfer, Cart, Clipboard, PageFirst } from 'mdi-material-ui'
-import { DocumentScanner, FileOpen, Settings } from '@mui/icons-material'
+import { BankTransfer, Cart, Clipboard, PageFirst, StarOutline } from 'mdi-material-ui'
+import { DocumentScanner, FileOpen, OpenInBrowser, Settings, WebAsset } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 
 const navigation = (): VerticalNavItemsType => {
@@ -71,6 +71,11 @@ const navigation = (): VerticalNavItemsType => {
         sectionTitle: 'Artist'
       },
       {
+        title: 'Request Reviews',
+        icon: StarOutline,
+        path: '/dashboard/artist/reviews'
+      },
+      {
         title: 'Incoming Requests',
         icon: CubeOutline,
         path: '/dashboard/artist/requests'
@@ -78,21 +83,21 @@ const navigation = (): VerticalNavItemsType => {
       {
         title: 'Payments/Payouts',
         icon: BankTransfer,
-        path: '/dashboard/payout'
+        path: '/dashboard/artist/payout'
       },
       {
-        title: 'Shop Settings',
-        icon: SettingsApplicationsIcon,
+        title: 'Artist Settings',
+        icon: Settings,
         path: '/dashboard/artist/artistsettings'
       },
       {
         title: 'Page Settings',
-        icon: DocumentScanner,
+        icon: WebAsset,
         path: '/dashboard/artist/pagesettings'
       },
       {
         title: 'Your Page',
-        icon: FileOpen,
+        icon: OpenInBrowser,
         path: '/box/' + (userData ? userData["displayName"] : "")
       }
     );

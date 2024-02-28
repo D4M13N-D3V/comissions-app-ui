@@ -1,8 +1,8 @@
 import { useUser,withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import { CircularProgress, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import EditableArtistPortfolio from "../../../components/Old/editableArtistPortfolio";
+import EditableArtistPortfolio from "../../../components/editableArtistPortfolio";
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -10,6 +10,7 @@ import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
 import ArtistRequest from "../../../components/ArtistRequest";
 import Box from '@mui/material/Box';
+import { Save } from "@mui/icons-material";
 
 const ArtistSettings = () => {
   const {user, isLoading} = useUser();
@@ -91,8 +92,10 @@ const saveChanges = async () => {
                     <Grid item xs={12} md={8}>
                         <Typography variant="h5" gutterBottom>General Settings</Typography>
                     </Grid>
-                    <Grid item xs={12} md={4} >
-                        <Button variant="contained" onClick={saveChanges} color="success" fullWidth>{saved ? "Saved" : "Save Changes"}</Button>   
+                    <Grid item xs={12} md={4} sx={{textAlign:"right"}} >
+                        <Tooltip arrow title="Save Changes">
+                            <IconButton onClick={saveChanges} color="success"><Save /></IconButton>
+                        </Tooltip>
                     </Grid>
                     <Grid item xs={12} md={12} >
                         <Grid container spacing={4} sx={{paddingTop:"2%"}}>

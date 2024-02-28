@@ -13,7 +13,7 @@ import CardStatisticsVerticalComponent from '../../core/components/card-statisti
 
 // ** Styled Component Import
 import ApexChartWrapper from '../../core/styles/libs/react-apexcharts'
-import { Card, TextField, Typography } from '@mui/material'
+import { Card, IconButton, TextField, Typography } from '@mui/material'
 import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import Button from '@mui/material/Button'
@@ -26,13 +26,16 @@ import { isObject } from 'util'
 import Orders from '../../components/Orders'
 import StatisticsCard from '../../views/dashboard/StatisticsCard'
 import ArtistStats from '../../components/ArtistStats'
-import { Clipboard } from 'mdi-material-ui'
+import { ArrowDownBox, BankTransfer, Cash, Clipboard, CubeOutline, StarOutline } from 'mdi-material-ui'
 import CircularProgress from '@mui/material/CircularProgress'
+import Tooltip from '@mui/material/Tooltip'
 import Box from '@mui/material/Box'
+import { Fullscreen, OpenInBrowser, Settings, WebAsset } from '@mui/icons-material'
 
 
 
 const Dashboard = () => {
+  const [userData , setUserData] = useState(null)
   const [profileData, setArtistData] = useState(null);
   const [requestData, setArtistRequestData] = useState(null);
   const [onboardData, setOnboardedData] = useState(false);
@@ -46,6 +49,9 @@ const Dashboard = () => {
   }
 
   const getData = async () => {
+    const userResponse = await fetch('/api/me');
+    const user = await userResponse.json();
+    setUserData(user);
     const profileResponse = await fetch('/api/artist/profile');
     const sellerProfile = await profileResponse.json();
     setArtistData(sellerProfile);
@@ -96,8 +102,10 @@ const Dashboard = () => {
               </Grid>
               <Grid item xs={12} md={4} sx={{textAlign:"center"}}>
               </Grid>
-              <Grid item xs={12} md={5} sx={{textAlign:"center"}}>
-                <Button color="info" onClick={()=>{router.push("/dashboard/requests")}} fullWidth variant="contained">View All Requests</Button>
+              <Grid item xs={12} md={5} sx={{textAlign:"right"}}>
+                <Tooltip title="Open an expanded view of your requests  .">
+                  <IconButton color="info" onClick={()=>{router.push("/dashboard/requests")}}><Fullscreen/></IconButton>
+                </Tooltip>
               </Grid>
               <Grid item xs={12} md={12} sx={{paddingTop:"2%"}}>
                 <Orders />
@@ -124,27 +132,41 @@ const Dashboard = () => {
                       null
                     )}
                   </Grid>
-                  <Grid item xs={12} md={8}>
-                    <TextField  size="small" label="Your Public URL" variant="outlined" disabled fullWidth defaultValue={"http://localhost:3000/box/"+profileData["name"].replace(/\s+/g, '-') ?? ""}>http://localhost:3000/box/"{(profileData["name"].replace(/\s+/g, '-') ?? "")}</TextField> 
+                  <Grid item xs={12} md={12}>
+                    <Tooltip title="Open an expanded view of your reviews.">
+                      <IconButton color="info" onClick={() => {router.push("/dashboard/artist/reviews")  }} size="large">
+                        <StarOutline style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Open an expanded view of your requests.">
+                      <IconButton color="info" onClick={() => {router.push("/dashboard/artist/requests")  }} size="large">
+                        <CubeOutline style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="View your payouts and request related transactions.">
+                      <IconButton color="success" onClick={() => { router.push("/dashboard/artist/payout") }} size="large">
+                        <BankTransfer style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
                   </Grid>
-                  <Grid item xs={12} md={2}>
-                    <Button color="info" startIcon={<Clipboard/>} onClick={()=>{router.push("/dashboard/artist/artistsettings#portfolio")}} fullWidth variant="outlined">Copy</Button>
+                  <Grid item xs={12} md={12}>
+                    <Tooltip title="Manage the settings of your artist account.">
+                      <IconButton color="primary" onClick={() => { router.push("/dashboard/artist/artistsettings") }} size="large">
+                        <Settings style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Manage the settings of your artist page.">
+                      <IconButton color="primary" onClick={() => { router.push("/dashboard/artist/pagesettings") }} size="large">
+                        <WebAsset style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Open your artist page.">
+                      <IconButton color="primary" onClick={() => { router.push("/box/"+userData["displayName"]) }} size="large">
+                        <OpenInBrowser style={{ fontSize: 64 }} />
+                      </IconButton>
+                    </Tooltip>
                   </Grid>
-                  <Grid item xs={12} md={2}>
-                    <Button color="secondary" onClick={()=>{router.push("/dashboard/artist/artistsettings#portfolio")}} fullWidth variant="outlined">Preview</Button>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Button color="secondary" onClick={()=>{router.push("/dashboard/artist/artistsettings#portfolio")}} fullWidth variant="contained">Manage Portfolio</Button>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Button color="secondary" onClick={()=>{router.push("/dashboard/artist/pagesettings")}} fullWidth  variant="contained">Design Store Page</Button>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Button color="secondary" onClick={()=>{router.push("/dashboard/artist/pagesettings")}} fullWidth  variant="contained">Payment Portal</Button>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Button color="secondary" onClick={()=>{router.push("/dashboard/artist/artistsettings")}} fullWidth  variant="contained">Configure Your Shop</Button>
-                  </Grid>
+
                 </Grid>
               </CardContent>
             </Card>

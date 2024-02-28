@@ -21,9 +21,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import { Card, CardHeader } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from '@mui/material';
-import RequestReferenceImage from '../../../components/Old/requestReferencesImage';
-import RequestReferences from '../../../components/Old/requestReferences';
-
+import RequestReferences from '../../../components/requestReferences';
 
 export default function ServerPaginationGrid() {
   const router = useRouter();
@@ -149,8 +147,10 @@ export default function ServerPaginationGrid() {
                                   <CardContent>
                                     <Grid container>
                                       <Grid item xs={12} md={12}>
+                                        <Typography variant="h6" align="center">Reference Images</Typography>
                                       </Grid>
                                       <Grid item xs={12} md={12}>
+                                        <RequestReferences id={params.row.id} />
                                       </Grid>
                                     </Grid>
                                   </CardContent>
@@ -161,16 +161,16 @@ export default function ServerPaginationGrid() {
                       <Grid item xs={12} md={6}>
                           <Grid container spacing={3}>
                               <Grid item xs={12} md={12}>
-                                  <Tooltip title="Decline this request.">
+                                  <Tooltip arrow title="Decline this request.">
                                     <IconButton onClick={denyRequest} disabled={params.row.declined || params.row.accepted} color="error"><Close/></IconButton>
                                   </Tooltip>
-                                  <Tooltip title="Accept this request.">
+                                  <Tooltip arrow title="Accept this request.">
                                     <IconButton onClick={acceptRequest} disabled={params.row.declined || params.row.accepted} color="success"><Check/></IconButton>
                                   </Tooltip>
-                                  <Tooltip title="Upload asset image for customer.">
+                                  <Tooltip arrow title="Upload asset image for customer.">
                                     <IconButton disabled={!params.row.paid} color="primary"><Upload/></IconButton>
                                   </Tooltip>
-                                  <Tooltip title="Complete this request.">
+                                  <Tooltip arrow title="Complete this request.">
                                     <IconButton disabled={!params.row.paid || params.row.completed} color="success"><AssignmentTurnedInIcon/></IconButton>
                                   </Tooltip>
                                   {(!params.row.declined && !params.row.accepted && !params.row.paid && !params.row.completed ? (
@@ -189,7 +189,7 @@ export default function ServerPaginationGrid() {
                                    <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="filled" color="warning" />
                                 ):null)}
                                 {(params.row.completed ? (
-                                  <Chip disabled={!params.row.completed} icon={<Check />} label="Completed" variant="outlined" color="success" />
+                                  <Chip disabled={!params.row.completed} icon={<Check />} label="Completed" variant="filled" color="success" />
                                 ):null)}
                               </Grid>
                               <Grid item xs={12} md={12}>
@@ -212,13 +212,13 @@ export default function ServerPaginationGrid() {
                   <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
               </Dialog>
-              <Tooltip title="View more details."><IconButton onClick={viewRequest}  aria-label="accept" color="primary" onClick={handleClickOpen}><OpenInNew/></IconButton></Tooltip>
+              <Tooltip arrow title="View more details."><IconButton onClick={viewRequest}  aria-label="accept" color="primary" onClick={handleClickOpen}><OpenInNew/></IconButton></Tooltip>
               {((params.row.accepted==false && params.row.declined==false && params.row.completed==false) ? (
                   <>
-                  <Tooltip title="Accept this request.">
+                  <Tooltip arrow title="Accept this request.">
                   <IconButton onClick={acceptRequest}  aria-label="accept" color="success"><Check/></IconButton>
                 </Tooltip>
-                  <Tooltip title="Deny this request.">
+                  <Tooltip arrow title="Deny this request.">
                     <IconButton  onClick={denyRequest} aria-label="deny" sx={{marginLeft:"2px"}} color="error"><Close/></IconButton>
                   </Tooltip>
                   </>
@@ -226,7 +226,7 @@ export default function ServerPaginationGrid() {
               )}
               {((params.row.accepted==true && params.row.declined==false && params.row.completed==false && params.row.paid==true) ? (
                   <>
-                  <Tooltip title="Complete this request.">
+                  <Tooltip arrow title="Complete this request.">
                     <IconButton onClick={completeRequest}  aria-label="complete" color="success"><ClipboardCheck/></IconButton>
                   </Tooltip>
                   </>
@@ -241,7 +241,7 @@ export default function ServerPaginationGrid() {
   const [requestData, setRequestData] = React.useState({});  
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
-    pageSize: 5,
+    pageSize: 15,
   });
 
 
@@ -311,7 +311,7 @@ export default function ServerPaginationGrid() {
         columns={columns}
         rowCount={rowCountState}
         loading={isLoading}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[15]}
         paginationModel={paginationModel}
         paginationMode="server"
         onPaginationModelChange={handlePageChange}

@@ -7,12 +7,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from "react";
-import EditableArtistPortfolio from "../../../components/Old/editableArtistPortfolio";
-import ArtistPortfolio from "../../../components/Old/artistPortfolio";
+import EditableArtistPortfolio from "../../../components/editableArtistPortfolio";
+import ArtistPortfolio from "../../../components/artistPortfolio";
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Rating from '@mui/material/Rating';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import Reviews from "../../../components/reviews";
 
 const Profile = () => {
 
@@ -132,19 +133,9 @@ const Profile = () => {
                                             <Typography variant="h5" align="center" gutterBottom>REVIEWS HEADER</Typography>
                                         </Grid>
                                         <Grid item xs={12} md={12} >
-                                            <DataGrid
-                                                rows={rows}
-                                                columns={columns}
-                                                autoHeight={true}
-                                                initialState={{
-                                                pagination: {
-                                                    paginationModel: {
-                                                    pageSize: 5,
-                                                    },
-                                                },
-                                                }}
-                                                pageSizeOptions={[5]}
-                                            />
+                                            {profileData!=null ? (
+                                                <Reviews artistId={profileData["id"]}/>
+                                            ):null}
                                         </Grid>
                                     </Grid>
                                 </CardContent>

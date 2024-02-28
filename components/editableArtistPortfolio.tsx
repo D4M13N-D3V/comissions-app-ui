@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { ImageList, Box, Button, CircularProgress, Slider } from '@mui/material';
+import { ImageList, Box, Button, CircularProgress, Slider, IconButton } from '@mui/material';
 import { useEffect, useState } from "react";
 import EditableArtistPortfolioImage from './editableArtistPortfolioImage';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import { Tooltip } from '@mui/material';
 import { Grid } from '@mui/material';
+import { FileUpload } from '@mui/icons-material';
 const EditableArtistPortfolio = ({ artistId }) => {
     const [portfolioData, setPortfolioData] = useState([]);
     const [columns, setColumns] = useState(2);
@@ -51,7 +53,7 @@ const EditableArtistPortfolio = ({ artistId }) => {
             (
                 
                 <Grid container spacing={2} sm={12}>
-                <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
+                <Grid item xs={12} sm={1} sx={{ textAlign: "center" }}>
                     <input
                         id="portfolioUploadInput"
                         style={{ display: 'none' }}
@@ -60,19 +62,15 @@ const EditableArtistPortfolio = ({ artistId }) => {
                         onChange={handlePortfolioUploadImageChange}
                     />
                     <label htmlFor="portfolioUploadInput">
-                        <Button
-                        fullWidth
-                        variant='outlined'
-                            component="span"
-                            size="large"
-                            sx={{width:"100%"}}
-                            startIcon={<FileOpenIcon />}
-                        >
-                        {(portfolioData.length > 0 ? "Upload Another Portfolio Image" : "Upload Your First Portfolio Image")}
-                        </Button>
+                        <Tooltip arrow title="Upload Image To Portfolio">
+                            <IconButton color="primary" component="span">
+                                <FileUpload />
+                            </IconButton>
+                        </Tooltip>
                     </label>
                 </Grid>
-                    <Grid item xs={12} sm={12} sx={{ textAlign: "center" }}>
+                    <Grid item xs={12} sm={11} sx={{ textAlign: "center" }}>
+                        <Tooltip arrow title="Amount of columns">
                         <Slider
                             defaultValue={columns}
                             aria-labelledby="discrete-slider"
@@ -82,6 +80,8 @@ const EditableArtistPortfolio = ({ artistId }) => {
                             marks
                             min={1}
                             max={5}/>
+                            </Tooltip>
+
                     </Grid> 
                     <Grid item xs={12} sm={12} sx={{maxHeight:"45rem",overflowY:"scroll"}}>
                         <ImageList variant='masonry' cols={columns}  sx={{  width:"100%" }}>

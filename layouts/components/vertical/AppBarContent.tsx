@@ -65,7 +65,7 @@ const AppBarContent = (props: Props) => {
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {(profileData ? (
         <NovuProvider subscriberId={profileData["id"]} applicationIdentifier={'9SKjzgN_odAF'}>
-          <PopoverNotificationCenter colorScheme={'light'}>
+          <PopoverNotificationCenter colorScheme={'dark'}>
             {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
           </PopoverNotificationCenter>
         </NovuProvider>

@@ -1,5 +1,5 @@
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import { CircularProgress, Grid, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import * as React from 'react';
+import { Save } from "@mui/icons-material";
+import Tooltip from '@mui/material/Tooltip';
 
 
 const ArtistSettings = () => {
@@ -64,11 +66,9 @@ const ArtistSettings = () => {
                                 <Typography variant="h5" gutterBottom>General Settings</Typography>
                             </Grid>
                             <Grid item xs={12} md={4} >
-                                {(saved) ? (
-                                    <Button variant="contained" color="success" fullWidth onClick={saveChanges}>Saved</Button>
-                                ):(
-                                    <Button variant="contained" color="success" fullWidth onClick={saveChanges}>Save Changes</Button>
-                                )}
+                                <Tooltip title="Save changes">
+                                    <IconButton onClick={saveChanges} color="success" sx={{float:"right"}}><Save/></IconButton>
+                                </Tooltip>
                             </Grid>
                             <Grid item xs={12} md={12} sx={{ paddingTop: "2%" }}>
                                 <TextField id="outlined-basic" label="Display Name" onChange={handleDisplayNameChange} variant="outlined" fullWidth value={displayName} />
