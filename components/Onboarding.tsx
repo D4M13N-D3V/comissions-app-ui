@@ -9,9 +9,9 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField';
-import ArtistDashboardRequest from '../components/Old/artistDashboardRequest';
-import ArtistPortfolio from '../components/Old/artistPortfolio';
-import EditableArtistPortfolio from '../components/Old/editableArtistPortfolio';
+import ArtistDashboardRequest from './artistDashboardRequest';
+import ArtistPortfolio from '../components/artistPortfolio';
+import EditableArtistPortfolio from '../components/editableArtistPortfolio';
 import { useEffect, useState } from "react";
 
 import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
