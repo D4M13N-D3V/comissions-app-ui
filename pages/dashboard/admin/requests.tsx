@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
-import ArtistRequest from "../../../components/ArtistRequest";
+import ArtistRequest from "../../../components/dashboard/admin/artistRequest";
 
 const ArtistRequests = () => {
   const {user, isLoading} = useUser();

@@ -4,7 +4,7 @@ import Table from 'mdi-material-ui/Table'
 import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
-
+import ListIcon from '@mui/icons-material/List';
 // ** Type import
 import { VerticalNavItemsType } from '../../core/layouts/types'
 import { BankTransfer, Cart, Clipboard, PageFirst, StarOutline } from 'mdi-material-ui'
@@ -38,6 +38,11 @@ const navigation = (): VerticalNavItemsType => {
 
   var result = [
     {
+      title: 'Dashboard',
+      icon: HomeOutline,
+      path: '/dashboard'
+    },
+    {
       sectionTitle: 'Admin'
     },
     {
@@ -49,18 +54,13 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle: 'General'
     },
     {
-      title: 'Dashboard',
-      icon: HomeOutline,
-      path: '/dashboard'
-    },
-    {
       title: 'Account Settings',
       icon: Settings,
       path: '/dashboard/settings'
     },
     {
       title: 'Your Requests',
-      icon: Cart,
+      icon: ListIcon,
       path: '/dashboard/requests'
     }
   ];
@@ -77,7 +77,7 @@ const navigation = (): VerticalNavItemsType => {
       },
       {
         title: 'Incoming Requests',
-        icon: CubeOutline,
+        icon: ListIcon,
         path: '/dashboard/artist/requests'
       },
       {

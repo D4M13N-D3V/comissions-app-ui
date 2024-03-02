@@ -16,11 +16,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
 import TextField from '@mui/material/TextField';
-import ArtistPortfolio from "../../components/Old/artistPortfolio";
+import ArtistPortfolio from "../../components/dashboard/artist/portfolio";
 import { RouterNetwork } from "mdi-material-ui";
 import { useRouter } from "next/router";    
 import { profile } from "console";
 import FileOpen from "@mui/icons-material/FileOpen";
+import Reviews from "../../components/dashboard/artist/reviews";
 
 const Profile = () => {
 
@@ -57,25 +58,29 @@ const Profile = () => {
     const handleClose = () => {
       setOpen(false);
     };
-  
     const submitRequest = async (payload) => {
-        const formData = new FormData();
-        formData.append("artistId", payload.artistId);
-        formData.append("message", payload.message);
-        formData.append("amount", payload.amount);
-        formData.append("file", payload.file); // Append the file to FormData
     
-        const requestResponse = await fetch('/api/box/newRequest', {
-            method: 'POST',
-            body: formData // Pass FormData containing the file
-        });
-    
-        if(requestResponse.ok){
-            router.push("/dashboard/requests")
-        } else {
-            alert("Error submitting request")
+        try {
+            const requestResponse = await fetch('/api/box/newRequest', {
+                method: 'POST',
+                body: JSON.stringify({
+                    artistId: profileData["id"],
+                    message: payload.get('Message'),
+                    amount: payload.get('Amount'),
+                })
+            });
+            if (requestResponse.ok) {
+                const requestResponseData = await requestResponse.json();
+                router.push("/dashboard/requests/"+requestResponseData["id"]);
+            } else {
+                const errorData = await requestResponse.json();
+                alert("Error submitting request: " + errorData.detail);
+            }
+        } catch (error) {
+            console.error('Error submitting request:', error);
+            alert("Error submitting request. Please try again later.");
         }
-    }
+    };
     
     const getData = async () => {
         if(router.query.artistName!=null){
@@ -92,31 +97,6 @@ const Profile = () => {
         getData()
     }, [router.query.artistName]);
   
-    const columns: GridColDef[] = [
-        {
-          field: 'message',
-          headerName: 'Review',
-          flex: 0.75
-        },
-        {
-          field: 'rating',
-          headerName: 'Rating',
-          flex: 0.25,
-          renderCell: (params: GridValueGetterParams) => (
-            <Rating name="read-only" value={params.value} readOnly />
-          ),
-        },
-      ];
-      
-      const rows = [
-        {   id: 1,  message: 'Great work!', rating: 5 },
-        {   id: 2,  message: 'BAD work!', rating: 1 },
-        {   id: 3,  message: 'Okay work!', rating: 4 },
-        {   id: 4,  message: 'Meh work!', rating: 2 },
-        {   id: 5,  message: 'Great work!', rating: 5 },
-        {   id: 6,  message: 'Mid work!', rating: 3 },
-        {   id: 7,  message: 'HORRIBLE work!', rating: 1 },
-      ];
 
   return (
     <>
@@ -128,15 +108,7 @@ const Profile = () => {
       onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const email = formData.get("email");
-        const file = formData.get("file"); // Get the file object
-        const payload = {
-          artistId: profileData["id"],
-          message: requestMessage,
-          amount: requestPrice,
-          file: file // Include the file in the payload
-        };
-        submitRequest(payload);
+        submitRequest(formData);
         handleClose();
       },
     }}
@@ -150,8 +122,8 @@ const Profile = () => {
             autoFocus
             required
             margin="dense"
-            id="name"
-            name="message"
+            id="Message"
+            name="Message"
             label="Request Message"
             type="message"
             fullWidth
@@ -162,39 +134,17 @@ const Profile = () => {
             value={requestMessage}
         />
         <CurrencyTextField  
-            label="Price"
+            label="Amount"
             variant="standard"
             currencySymbol="$"
+            name="Amount"
             outputFormat="number"
             decimalCharacter="."
             digitGroupSeparator=","
             fullWidth
             onChange={handleRequestPriceChange}
-            value={requestPrice}
+            value={requestPrice}    
         />
-        
-                    <input
-                        id="file"
-                        name="file"
-                        style={{ display: 'none' }}
-                        accept="image/*"
-                        type="file"
-                        multiple
-                        onChange={handleFileChange}
-                    />
-                    <label htmlFor="file">
-                        <Button
-                        fullWidth
-                        
-                        variant='outlined'
-                            component="span"
-                            size="large"
-                            sx={{width:"100%"}}
-                            startIcon={<FileOpen />}
-                        >
-                        Select Your Reference Images
-                        </Button>
-                    </label>
     </DialogContent>
     <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
@@ -264,19 +214,9 @@ const Profile = () => {
                                                 <Typography variant="h5" align="center" gutterBottom>REVIEWS HEADER</Typography>
                                             </Grid>
                                             <Grid item xs={12} md={12} >
-                                                <DataGrid
-                                                    rows={rows}
-                                                    columns={columns}
-                                                    autoHeight={true}
-                                                    initialState={{
-                                                    pagination: {
-                                                        paginationModel: {
-                                                        pageSize: 5,
-                                                        },
-                                                    },
-                                                    }}
-                                                    pageSizeOptions={[5]}
-                                                />
+                                                {profileData!=null ? (
+                                                    <Reviews artistId={profileData["id"]}/>
+                                                ):null}
                                             </Grid>
                                         </Grid>
                                     </CardContent>

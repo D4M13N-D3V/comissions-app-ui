@@ -12,11 +12,12 @@ import {Check, Refresh } from '@mui/icons-material';
 import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
+import { useEffect, useState } from "react";
 
 import dayjs from 'dayjs';
 
 
-export default function ServerPaginationGrid() {
+export default function CustomerOrders() {
     const columns = [
       { field: 'id', headerName: 'ID', flex: 0.1},
       { field: 'status', headerName: 'Status', flex: 0.15,

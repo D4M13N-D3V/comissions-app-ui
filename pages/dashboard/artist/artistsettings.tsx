@@ -2,13 +2,13 @@ import { useUser,withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { CircularProgress, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import EditableArtistPortfolio from "../../../components/editableArtistPortfolio";
+import EditableArtistPortfolio from "../../../components/dashboard/artist/editablePortfolio";
 import { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
-import ArtistRequest from "../../../components/ArtistRequest";
+import ArtistRequest from "../../../components/dashboard/admin/artistRequest";
 import Box from '@mui/material/Box';
 import { Save } from "@mui/icons-material";
 

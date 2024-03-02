@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 
-const ArtistDashboardRequest = () => {
+const ArtistOnboardRequest = () => {
     const [sellerRequestData, setArtistRequestData] = useState(null);
   
     const getData = async () => {
@@ -50,4 +50,4 @@ const ArtistDashboardRequest = () => {
         ))
     )
         }
-export default ArtistDashboardRequest
+export default ArtistOnboardRequest

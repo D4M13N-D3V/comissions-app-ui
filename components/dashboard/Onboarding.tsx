@@ -1,19 +1,8 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid'
-import TextField from '@mui/material/TextField';
-import ArtistDashboardRequest from './artistDashboardRequest';
-import ArtistPortfolio from '../components/artistPortfolio';
-import EditableArtistPortfolio from '../components/editableArtistPortfolio';
+import {Box,Stepper,Step,StepLabel,StepContent,Button,Paper,Typography,Grid,TextField} from "@mui/material"
+import ArtistDashboardRequest from './artistRequest';
+import EditableArtistPortfolio from './artist/editablePortfolio';
 import { useEffect, useState } from "react";
-
 import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
 import {Card, CardContent, CardHeader, Divider } from '@mui/material';
 

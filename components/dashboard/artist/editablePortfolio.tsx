@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { ImageList, Box, Button, CircularProgress, Slider, IconButton } from '@mui/material';
 import { useEffect, useState } from "react";
-import EditableArtistPortfolioImage from './editableArtistPortfolioImage';
-import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { Tooltip } from '@mui/material';
-import { Grid } from '@mui/material';
+import { Grid, ImageList, Box, Tooltip, CircularProgress, Slider, IconButton } from '@mui/material';
 import { FileUpload } from '@mui/icons-material';
+import EditableArtistPortfolioImage from './editablePortfolioImage';
+
 const EditableArtistPortfolio = ({ artistId }) => {
     const [portfolioData, setPortfolioData] = useState([]);
     const [columns, setColumns] = useState(2);
@@ -64,7 +62,7 @@ const EditableArtistPortfolio = ({ artistId }) => {
                     <label htmlFor="portfolioUploadInput">
                         <Tooltip arrow title="Upload Image To Portfolio">
                             <IconButton color="primary" component="span">
-                                <FileUpload />
+                                <FileUpload sx={{fontSize:"2rem"}}/>
                             </IconButton>
                         </Tooltip>
                     </label>

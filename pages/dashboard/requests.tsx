@@ -24,6 +24,7 @@ import { DownloadBox, StarOutline } from 'mdi-material-ui';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, FormControl, InputLabel, Box } from '@mui/material';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
+import { request } from 'http';
 
 
 export default function ServerPaginationGrid() {
@@ -33,22 +34,22 @@ export default function ServerPaginationGrid() {
         { field: 'status', headerName: 'Status', flex: 0.15,
         renderCell: (params) => {
             if(params.row.completed){
-                return <Chip icon={<Check />} label="Completed" variant="filled" color="success" />
+                return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
             }
             else if(params.row.paid){
-                return <Chip icon={<PriceCheckIcon />} label="Paid" variant="filled" color="success" />
+                return <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
             }
             else if(params.row.accepted && params.row.paid==false){
-                return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="filled" color="warning" />
+                return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
             }
             else if(params.row.accepted && params.row.paid){
-                return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="filled" color="info" />
+                return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="outlined" color="info" />
             }
             else if(params.row.declined){
-                return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="filled" color="error" />
+                return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
             }
             else{
-                return <Chip icon={<Refresh />} label="Pending" variant="filled" color="secondary" />
+                return <Chip icon={<Refresh />} label="Pending" variant="outlined" color="secondary" />
             }
         }
     },
@@ -74,214 +75,16 @@ export default function ServerPaginationGrid() {
         } },
         { field: 'download', headerName: '', flex:0.1, 
             renderCell: (params) =>{
-                const acceptRequest = async () => {
-                  let response = await fetch('/api/artist/requests/'+params.row["id"]+"/accept", { method: 'PUT' })
-                  if(response.status === 200){
-                    router.reload()
-                  }
-                  else{
-                    alert("Error accepting request.")
-                  }
-                }
-    
-                const viewRequest = async () => {
-    
-                }
-    
-                const denyRequest = async () => {
-                  let response = await fetch('/api/artist/requests/'+params.row["id"]+"/deny", { method: 'PUT' })
-                  if(response.status === 200){
-                    router.reload()
-                  }
-                  else{
-                    alert("Error accepting request.")
-                  }
-                }
-    
-                const completeRequest = async () => {
-                  let response = await fetch('/api/artist/requests/'+params.row["id"]+"/complete", { method: 'PUT' })
-                  if(response.status === 200){
-                    router.reload()
-                  }
-                  else{
-                    alert("Error accepting request.")
-                  }
-                }
+
                 const handlePay = async () => {
-                    var paymentUrlRequest = await fetch('/api/requests/'+params.row.id+'/payment')
-                    //console.log(paymentUrlRequest);
-                    var paymentUrlJson = await paymentUrlRequest.json();
-                    var paymentUrl = paymentUrlJson.paymentUrl;
-                    window.open(paymentUrl);
-                }
-                const [open, setOpen] = React.useState(false);
-                const [rating, setRating] = React.useState(params.row.reviewRating);
-                const [review, setReview] = React.useState(params.row.reviewMessage);
-                const [alreadyReviewed, setAlreadyReviewed] = React.useState(params.row.reviewMessage != null && params.row.reviewMessage != "");
-                const handleClickOpen = () => {
-                  setOpen(true);
-                };
-              
-                const handleClose = () => {
-                  setOpen(false);
-                };
-                
-
-                const handleReviewChange = (event) => {
-                  setReview(event.target.value);
-                }
-
-                const handleRatingChange = async (event) => {
-                  var rating = event.target.value;
-                  var response = await fetch('/api/requests/'+params.row.id+'/review', {
-                    method:"PUT",
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                      rating: rating,
-                      message: review
-                    })
-                  });
-                  if(response.ok){
-                    router.push("/dashboard/requests")
-                  }
-                  else{
-                    alert("Could not submit review!")
-                  }
-                }
-
-                let formattedTime = ""
-                const date = new Date(params.row.requestDate);  
-                formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
-
+                  var paymentUrlRequest = await fetch('/api/requests/'+params.row.id+'/payment')
+                  //console.log(paymentUrlRequest);
+                  var paymentUrlJson = await paymentUrlRequest.json();
+                  var paymentUrl = paymentUrlJson.paymentUrl;
+                  window.open(paymentUrl);
+              }
                 return (<>
-                    <Dialog
-                      fullWidth={true}
-                      maxWidth={"lg"}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      <DialogTitle>Request submitted on {formattedTime ?? ''}</DialogTitle>
-                      <DialogContent>
-                        <Grid container spacing={3} sx={{paddingTop:"1%"}}>
-                            <Grid item xs={12} md={6}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={12}>
-                                        <TextField
-                                            multiline={true}
-                                            rows={10}
-                                            fullWidth
-                                            label="Request Message"
-                                            value={params.row.message}
-                                            disabled
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                      <Card>
-                                        <CardContent>
-                                          <Grid container>
-                                            <Grid item xs={12} md={12}>
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                            </Grid>
-                                          </Grid>
-                                        </CardContent>
-                                      </Card>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12} md={6}>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12} md={6}>
-                                      <Grid container>
-                                        <Grid item xs={12} md={6}>
-                                          <Grid container>
-                                            <Grid item xs={12} md={3}>
-                                              <Tooltip arrow title="Pay for this request.">
-                                                <IconButton onClick={handlePay} disabled={params.row.accepted && params.row.paid || params.row.declined} color="success"><ShoppingCartCheckoutIcon/></IconButton>
-                                              </Tooltip>
-                                            </Grid>
-                                            <Grid item xs={12} md={3}>
-                                              <Tooltip arrow title="Download all assets.">
-                                                <IconButton disabled={!params.row.completed} color="secondary"><Download/></IconButton>
-                                              </Tooltip>
-                                            </Grid>
-                                          </Grid>
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                          <Grid container spacing={1}>
-                                            <Grid item xs={12} md={12}>
-                                              {(!params.row.declined && !params.row.accepted && !params.row.paid && !params.row.completed ? (
-                                                <Chip icon={<Refresh />} label="Pending" variant="filled" color="secondary" />
-                                              ):null)}
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                              {(params.row.declined ? (
-                                                <Chip icon={<AssignmentLateIcon />} label="Declined" variant="filled" color="error" />
-                                              ):null)}
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                              {(params.row.accepted ? (
-                                                <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="filled" color="info" />
-                                              ):null)}
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                              {(params.row.paid && params.row.acccepted ? (
-                                                <Chip label="Paid" variant="filled" color="success" />
-                                              ):null)}
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                              {(params.row.paid==false && params.row.accepted ? (
-                                                <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="filled" color="warning" />
-                                              ):null)}
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                              {(params.row.completed ? (
-                                                <Chip disabled={!params.row.completed} icon={<Check />} label="Completed" variant="filled" color="success" />
-                                              ):null)}
-                                            </Grid>
-                                          </Grid>
-                                        </Grid>
-                                      </Grid>
-                                    </Grid>
-                                    {(params.row.completed) ? (
-                                    <Grid item xs={12} md={6} sx={{textAlign:"center"}}>
-                                      <Tooltip arrow title="Rate this request.">
-                                        <Rating
-                                        sx={{paddingTop:"1%"}}
-                                        size='large'
-                                           value={rating}
-                                           onChange={handleRatingChange}
-                                          disabled={alreadyReviewed}
-                                        />
-                                      </Tooltip>  
-                                      <Tooltip arrow title={alreadyReviewed ? "The review you left for this request." : "Write a review for this request."}>
-                                        <TextField disabled={alreadyReviewed} onChange={handleReviewChange} size="small" value={params.row.reviewMessage} focused rows={4} multiline></TextField>
-                                      </Tooltip>  
-                                    </Grid>
-                                    ):null}
-                                    <Grid item xs={12} md={12}>
-                                      <Card>
-                                        <CardContent>
-                                          <Grid container>
-                                            <Grid item xs={12} md={12}>
-                                            </Grid>
-                                            <Grid item xs={12} md={12}>
-                                            </Grid>
-                                          </Grid>
-                                        </CardContent>
-                                      </Card>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Close</Button>
-                      </DialogActions>
-                    </Dialog>
-                    <Tooltip arrow title="View more details."><IconButton onClick={handleClickOpen}  aria-label="accept" color="primary"><OpenInNew/></IconButton></Tooltip>
+                    <Tooltip arrow title="View more details."><IconButton onClick={() => { router.push("/dashboard/requests/"+params.row.id)}}  aria-label="accept" color="primary"><OpenInNew/></IconButton></Tooltip>
                     {((params.row.accepted==true &&params.row.declined==false && params.row.paid==false) ? (
                         <Tooltip arrow title="Pay for this request."><IconButton onClick={handlePay}  aria-label="accept" color="success"><ShoppingCartCheckoutIcon/></IconButton></Tooltip>
                     ): null

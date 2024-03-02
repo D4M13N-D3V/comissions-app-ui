@@ -2,13 +2,13 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { GridColDef } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
-import { Alert, Button, CircularProgress, ImageList, ImageListItem, ListItem, Stack, Typography } from '@mui/material';
+import { Button, CardHeader, CircularProgress, Stack, Typography } from '@mui/material';
 import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
 import { DateField } from '@mui/x-date-pickers/DateField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Chip from '@mui/material/Chip';
-import {ArrowBack, AssignmentLateOutlined, Check, Close, Download, Error, OpenInFull, OpenInNew, Refresh, Star, Upload, Warning } from '@mui/icons-material';
+import {ArrowBack, Check, Close, Download, OpenInFull, OpenInNew, Refresh, Star, Upload } from '@mui/icons-material';
 import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
@@ -22,15 +22,16 @@ import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import { useState, useEffect } from 'react';
+import { Alert } from '@mui/material';
+import { ImageList } from '@mui/material';
+import AssetImage from '../../../../components/dashboard/artist/AssetImage'
+import ReferenceImage from '../../../../components/dashboard/artist/ReferenceImage'
 import { UploadBoxOutline } from 'mdi-material-ui';
-import AssetImage from '../../../components/dashboard/artist/AssetImage'
-import ReferenceImage from '../../../components/dashboard/artist/ReferenceImage'
-import Paper from '@mui/material/Paper';
 
-const RequestDetails = () => {
-    const [request, setRequest] = useState(null);
+const ArtistRequestDetails = () => {
     const [references, setReferences] = useState([]);
     const [assets, setAssets] = useState([]);
+    const [request, setRequest] = useState(null);
     const router = useRouter();
 
     const getData = async () => {
@@ -38,38 +39,72 @@ const RequestDetails = () => {
             const response = await fetch("/api/requests/"+router.query.requestId+"/details");
             const data = await response.json();
             setRequest(data);
-            setRating(data.reviewRating)
+            setRating(data.requestRating)
             setReview(data.reviewMessage)
-            setAlreadyReviewed(data.reviewed)
 
-            const requestResponse = await fetch("/api/requests/"+router.query.requestId+"/references");
+            const requestResponse = await fetch("/api/artist/requests/"+router.query.requestId+"/references");
             const requestJson = await requestResponse.json();
             setReferences(requestJson); 
 
-            const assetsResponse = await fetch("/api/requests/"+router.query.requestId+"/assets");
-            const assetsJson = await assetsResponse.json();
-            setAssets(assetsJson);
+            const assetResponse = await fetch("/api/artist/requests/"+router.query.requestId+"/assets");
+            const assetJson = await assetResponse.json();
+            setAssets(assetJson);
         }
     }
 
-    const handleReferenceUpload = async (event) =>{
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('newImage', file);
-    
-      fetch('/api/requests/'+router.query.requestId+"/newreference", {
-        method: 'POST',
-        body: formData // Don't set Content-Type, FormData will handle it
-      })
-      .then(response => response.json())
-      .then(data => {
-        getData();
-      })
-      .catch(error => {
-        console.error('Error uploading file:', error);
-        // Handle error appropriately
-      });
-    }
+    const acceptRequest = async () => {
+        let response = await fetch('/api/artist/requests/'+request["id"]+"/accept", { method: 'PUT' })
+        if(response.status === 200){
+          router.reload()
+        }
+        else{
+          alert("Error accepting request.")
+        }
+      }
+
+      const viewRequest = async () => {
+
+      }
+
+      const denyRequest = async () => {
+        let response = await fetch('/api/artist/requests/'+request["id"]+"/deny", { method: 'PUT' })
+        if(response.status === 200){
+          router.reload()
+        }
+        else{
+          alert("Error accepting request.")
+        }
+      }
+
+      const completeRequest = async () => {
+        let response = await fetch('/api/artist/requests/'+request["id"]+"/complete", { method: 'PUT' })
+        if(response.status === 200){
+          router.reload()
+        }
+        else{
+          alert("Error accepting request.")
+        }
+      }
+
+      const handleReferenceUpload = async (event) =>{
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('newImage', file);
+      
+        fetch('/api/artist/requests/'+router.query.requestId+"/newasset", {
+          method: 'POST',
+          body: formData // Don't set Content-Type, FormData will handle it
+        })
+        .then(response => response.json())
+        .then(data => {
+          getData();
+        })
+        .catch(error => {
+          console.error('Error uploading file:', error);
+          // Handle error appropriately
+        });
+      }
+  
 
     useEffect(() => {
         getData()
@@ -78,31 +113,7 @@ const RequestDetails = () => {
       const [open, setOpen] = React.useState(false);
       const [rating, setRating] = React.useState(1);
       const [review, setReview] = React.useState("");
-      const [alreadyReviewed, setAlreadyReviewed] = React.useState(true);
 
-      const handleReviewChange = (event) => {
-        setReview(event.target.value);
-      }
-
-      const handleRatingChange = async (event) => {
-        var rating = event.target.value;
-        var response = await fetch('/api/requests/'+request.id+'/review', {
-          method:"PUT",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            rating: rating,
-            message: review
-          })
-        });
-        if(response.ok){
-          router.reload();
-        }
-        else{
-          alert("Could not submit review!")
-        }
-      }
       const handlePay = async () => {
         var paymentUrlRequest = await fetch('/api/requests/'+request.id+'/payment')
         //console.log(paymentUrlRequest);
@@ -118,61 +129,29 @@ const RequestDetails = () => {
   {(request) ? (
     <Card>
       <CardContent>
-
       <Grid container spacing={3} sx={{paddingTop:"1%"}}>
             <Grid item xs={12} md={6}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={12}>
-                      <Tooltip title="This is the message sent in with the request explaining what the customer wants.">
                         <TextField
                             multiline={true}
                             rows={10}
                             fullWidth
+                            label="Request Message"
                             value={request.message}
                             disabled
                         />
-                      </Tooltip>
                     </Grid>
                     <Grid item xs={12} md={12}>
                       <Grid container>
-                        <Grid item xs={12} md={12}>
-                          <Grid container>
-                            <Grid item xs={12} md={1}>
-                              <input
-                                  id="uploadInput"
-                                  style={{ display: 'none' }}
-                                  accept="image/*"
-                                  type="file"
-                                  onChange={handleReferenceUpload}
-                                  disabled={request.declined || request.accepted}
-                              />
-                              <label htmlFor="uploadInput">
-                                <Tooltip arrow title="Upload a new reference image.">
-                                  <IconButton disabled={request.declined || request.accepted} component="span" color="info"><UploadBoxOutline sx={{fontSize:"2rem"}} /></IconButton>
-                                </Tooltip>
-                              </label>
-                            </Grid>
-                            <Grid item xs={12} md={11}>
-                            {request.accepted ? (
-                                <Alert sx={{width:"100%"}} severity="warning">You can no longer upload reference images, request is accepted!</Alert>
-                            ):(
-                              (references.length > 0) ? (
-                                <Alert severity="info">
-                                  There is a maximum of 10 reference images per request.
-                                </Alert>
-                              ):(
-                                <Alert sx={{width:"100%"}} severity="error">You need to add reference images to your request!</Alert>
-                              )
-                            )}
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid item xs={12} md={12}>
                           <ImageList variant="masonry">
                             {(references.map((reference) => (
                               <ReferenceImage referenceId={reference.id} requestId={request.id}/>
                             )))}
                           </ImageList>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -183,18 +162,26 @@ const RequestDetails = () => {
                     <Grid item xs={12} md={10}>
                         <Grid container >
                         <Grid item xs={12} md={6}>
-                              <Tooltip arrow title="Download all assets.">
-                                <IconButton disabled={!request.completed} color="secondary"><Download/></IconButton>
+                            <Tooltip arrow title="Decline this request.">
+                              <IconButton onClick={denyRequest} disabled={request.declined || request.accepted} color="error"><Close/></IconButton>
+                            </Tooltip>
+                            <Tooltip arrow title="Accept this request.">
+                            <IconButton onClick={acceptRequest} disabled={request.declined || request.accepted} color="success"><Check/></IconButton>
+                            </Tooltip>
+                              <label htmlFor="uploadInput">
+                                <Tooltip arrow title="Upload asset image for customer.">
+                                  <IconButton disabled={request.completed} component="span" color="info"><UploadBoxOutline/></IconButton>
                                 </Tooltip>
-                              <Tooltip arrow title="Pay for this request.">
-                                <IconButton onClick={handlePay} disabled={!(request.accepted && !request.paid)} color="success"><ShoppingCartCheckoutIcon/></IconButton>
-                              </Tooltip>
+                              </label>
+                            <Tooltip arrow title="Complete this request.">
+                            <IconButton onClick={completeRequest} disabled={!request.paid || request.completed} color="success"><AssignmentTurnedInIcon/></IconButton>
+                            </Tooltip>
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <Stack spacing={2} direction="row">
                               {(request.declined ? (
                                 <Tooltip title="The request has been declined.">
-                                    <Chip icon={<AssignmentLateOutlined />} label="Declined" variant="outlined" color="error" />
+                                    <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
                                 </Tooltip>
                               ):null)}
                               {(!request.declined && !request.accepted && !request.paid && !request.completed ? (
@@ -208,12 +195,12 @@ const RequestDetails = () => {
                                 </Tooltip>
                               ):null)}
                               {(request.paid && request.accepted ? (
-                                <Tooltip title="The request has been paid for and your request is being worked on.">
+                                <Tooltip title="The request has been paid for you are clear to work on the request!">
                                     <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
                                 </Tooltip>
                               ):null)}
                               {(request.paid==false && request.accepted ? (
-                                <Tooltip title="You have not paid for this request.">
+                                <Tooltip title="The request has not been paid for.">
                                     <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
                                 </Tooltip>
                               ):null)}
@@ -228,7 +215,7 @@ const RequestDetails = () => {
                     </Grid>
                     <Grid item xs={12} md={2} sx={{textAlign:"right"}}>
                         <Tooltip title="Go back to viewing all your requests.">
-                            <IconButton onClick={() => {router.push("/dashboard/requests")}} color="primary">
+                            <IconButton onClick={() => {router.push("/dashboard/artist/requests")}} color="primary">
                                 <ArrowBack/>
                             </IconButton>
                         </Tooltip>
@@ -247,48 +234,54 @@ const RequestDetails = () => {
                     <Grid item xs={12} md={12}>
                         <Grid container spacing={3}>
                           <Grid item xs={12} md={12}>
-                              {request.completed ? (
-                                <Alert sx={{width:"100%"}} severity="success">Your success is complete and you can access your assets below!</Alert>
+                              {request.paid ? (
+                                <>
+                                <Grid container spacing={3}>
+                                  <Grid item xs={12} md={12}>
+                                    <Alert sx={{width:"100%"}} severity="success">The request has been paid for, start working on it!</Alert>
+                                  </Grid>
+                                  <Grid item xs={2} md={1}>
+                                    <input
+                                        id="uploadInput"
+                                        style={{ display: 'none' }}
+                                        accept="image/*"
+                                        type="file"
+                                        onChange={handleReferenceUpload}
+                                        disabled={request.completed}
+                                    />
+                                    <label htmlFor="uploadInput">
+                                      <Tooltip arrow title="Upload a new reference image.">
+                                        {assets.length>0 ? (
+                                          <IconButton disabled={request.completed} component="span" color="info"><UploadBoxOutline sx={{fontSize:"2rem"}} /></IconButton>
+                                        ):
+                                        (
+                                          <IconButton disabled={request.completed} component="span" color="warning"><UploadBoxOutline sx={{fontSize:"2rem"}} /></IconButton>
+                                        )}
+                                      </Tooltip>
+                                    </label>
+                                  </Grid>
+                                  <Grid item xs={10} md={11}>
+                                    {assets.length>0 ? (
+                                      <Alert sx={{width:"100%"}} severity="info">Your uploaded assets will appear below!</Alert>
+                                    ):
+                                    (
+                                      <Alert sx={{width:"100%"}} severity="warning">You have not uploaded any assets!</Alert>
+                                    )}
+                                  </Grid>
+                                  <Grid item xs={12} md={12}>
+                                  </Grid>
+                                </Grid>
+                                </> 
                               ):(
-                                <Alert sx={{width:"100%"}} severity="info">When your request is completed your assets will appear below!</Alert>
+                                <Alert sx={{width:"100%"}} severity="error">The request is not paid for do not work on the request!</Alert>
                               )}
                           </Grid>
-                          {request.completed ? (
-                            <Tooltip title={alreadyReviewed ? "You have already reviewed this request." : "Leave a review for this request now that it is completed!"}>
-                            <Grid item xs={12} md={12}>
-                              <Paper elevation={3} sx={{padding:"1%"}}>
-                              <Grid container spacing={3}>
-                                <Grid item xs={12} md={9}>
-                                  <TextField
-                                      fullWidth
-                                      focused
-                                      placeholder='Leave a review...'
-                                      value={review}
-                                      variant="outlined"
-                                      size="small"
-                                      disabled={alreadyReviewed}
-                                      onChange={handleReviewChange}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                  <Rating
-                                    name="simple-controlled"
-                                    size="large"
-                                    value={rating}
-                                    disabled={!review || alreadyReviewed}
-                                    onChange={handleRatingChange}/>
-                                </Grid>
-                              </Grid>
-                              </Paper>
-                            </Grid>
-                              </Tooltip>
-                          ): null}
                           <Grid item xs={12} md={12}>
-                            <ImageList variant="masonry">
-                              {(assets.map((asset) => (
-                                <AssetImage assetId={asset.id} requestId={request.id}/>
-                              )))}
-                            </ImageList>
+                          <ImageList variant="masonry">
+                            {(assets.map((asset) => (
+                              <AssetImage assetId={asset.id} requestId={request.id}/>
+                            )))}
+                          </ImageList>
                           </Grid>
                         </Grid>
                     </Grid>
@@ -312,6 +305,6 @@ const RequestDetails = () => {
 };
 
 // Protected route, checking user authentication client-side.(CSR)
-export default withPageAuthRequired(RequestDetails);
+export default withPageAuthRequired(ArtistRequestDetails);
 
 

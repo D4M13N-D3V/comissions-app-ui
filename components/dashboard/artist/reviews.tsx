@@ -12,8 +12,8 @@ import { DateField } from '@mui/x-date-pickers';
 export default function Reviews({artistId}) {
     const router = useRouter();
     const columns = [
-        { field: 'requestId', headerName: 'Request ID', flex: 0.1},
-        { field: 'message', headerName: 'Review Message', flex: 0.5},
+        { field: 'requestId', headerName: 'ID', flex: 0.1},
+        { field: 'message', headerName: 'Review', flex: 0.5},
         { field: 'rating', headerName: 'Rating', flex: 0.2, renderCell: (params) => {
             return <Rating value={params.row.rating} readOnly />;
         }}

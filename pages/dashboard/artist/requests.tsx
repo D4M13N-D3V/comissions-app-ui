@@ -30,22 +30,22 @@ export default function ServerPaginationGrid() {
     { field: 'status', headerName: 'Status', flex: 0.15,
       renderCell: (params) => {
         if(params.row.completed){
-            return <Chip icon={<Check />} label="Completed" variant="filled" color="success" />
+            return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
         }
         else if(params.row.paid){
-            return <Chip icon={<PriceCheckIcon />} label="Paid" variant="filled" color="success" />
+            return <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
         }
         else if(params.row.accepted && params.row.paid==false){
-            return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="filled" color="warning" />
+            return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
         }
         else if(params.row.accepted && params.row.paid){
-            return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="filled" color="info" />
+            return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="outlined" color="info" />
         }
         else if(params.row.declined){
-            return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="filled" color="error" />
+            return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
         }
         else{
-            return <Chip icon={<Refresh />} label="Pending" variant="filled" color="secondary" />
+            return <Chip icon={<Refresh />} label="Pending" variant="outlined" color="secondary" />
         }
       }
   },
@@ -75,7 +75,7 @@ export default function ServerPaginationGrid() {
             const acceptRequest = async () => {
               let response = await fetch('/api/artist/requests/'+params.row["id"]+"/accept", { method: 'PUT' })
               if(response.status === 200){
-                router.reload()
+                router.push("/dashboard/artist/requests/"+params.row["id"])
               }
               else{
                 alert("Error accepting request.")
@@ -89,7 +89,7 @@ export default function ServerPaginationGrid() {
             const denyRequest = async () => {
               let response = await fetch('/api/artist/requests/'+params.row["id"]+"/deny", { method: 'PUT' })
               if(response.status === 200){
-                router.reload()
+                router.push("/dashboard/artist/requests/"+params.row["id"])
               }
               else{
                 alert("Error accepting request.")
@@ -99,7 +99,7 @@ export default function ServerPaginationGrid() {
             const completeRequest = async () => {
               let response = await fetch('/api/artist/requests/'+params.row["id"]+"/complete", { method: 'PUT' })
               if(response.status === 200){
-                router.reload()
+                router.push("/dashboard/artist/requests/"+params.row["id"])
               }
               else{
                 alert("Error accepting request.")
@@ -121,98 +121,7 @@ export default function ServerPaginationGrid() {
             formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
 
             return (<>
-              <Dialog
-                fullWidth={true}
-                maxWidth={"lg"}
-                open={open}
-                onClose={handleClose}
-              >
-                <DialogTitle>Request submitted on {formattedTime ?? ''}</DialogTitle>
-                <DialogContent>
-                  <Grid container spacing={3} sx={{paddingTop:"1%"}}>
-                      <Grid item xs={12} md={6}>
-                          <Grid container spacing={3}>
-                              <Grid item xs={12} md={12}>
-                                  <TextField
-                                      multiline={true}
-                                      rows={10}
-                                      fullWidth
-                                      label="Request Message"
-                                      value={params.row.message}
-                                      disabled
-                                  />
-                              </Grid>
-                              <Grid item xs={12} md={12}>
-                                <Card>
-                                  <CardContent>
-                                    <Grid container>
-                                      <Grid item xs={12} md={12}>
-                                        <Typography variant="h6" align="center">Reference Images</Typography>
-                                      </Grid>
-                                      <Grid item xs={12} md={12}>
-                                        <RequestReferences id={params.row.id} />
-                                      </Grid>
-                                    </Grid>
-                                  </CardContent>
-                                </Card>
-                              </Grid>
-                          </Grid>
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                          <Grid container spacing={3}>
-                              <Grid item xs={12} md={12}>
-                                  <Tooltip arrow title="Decline this request.">
-                                    <IconButton onClick={denyRequest} disabled={params.row.declined || params.row.accepted} color="error"><Close/></IconButton>
-                                  </Tooltip>
-                                  <Tooltip arrow title="Accept this request.">
-                                    <IconButton onClick={acceptRequest} disabled={params.row.declined || params.row.accepted} color="success"><Check/></IconButton>
-                                  </Tooltip>
-                                  <Tooltip arrow title="Upload asset image for customer.">
-                                    <IconButton disabled={!params.row.paid} color="primary"><Upload/></IconButton>
-                                  </Tooltip>
-                                  <Tooltip arrow title="Complete this request.">
-                                    <IconButton disabled={!params.row.paid || params.row.completed} color="success"><AssignmentTurnedInIcon/></IconButton>
-                                  </Tooltip>
-                                  {(!params.row.declined && !params.row.accepted && !params.row.paid && !params.row.completed ? (
-                                  <Chip icon={<Refresh />} label="Pending" variant="filled" color="secondary" />
-                                ):null)}
-                                {(params.row.declined ? (
-                                  <Chip icon={<AssignmentLateIcon />} label="Declined" variant="filled" color="error" />
-                                ):null)}
-                                {(params.row.accepted ? (
-                                  <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="filled" color="info" />
-                                ):null)}
-                                {(params.row.paid ? (
-                                  <Chip  icon={<PriceCheckIcon />} label="Paid" variant="filled" color="success" />
-                                ):null)}
-                                {(params.row.paid==false && params.row.accepted ? (
-                                   <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="filled" color="warning" />
-                                ):null)}
-                                {(params.row.completed ? (
-                                  <Chip disabled={!params.row.completed} icon={<Check />} label="Completed" variant="filled" color="success" />
-                                ):null)}
-                              </Grid>
-                              <Grid item xs={12} md={12}>
-                                <Card>
-                                  <CardContent>
-                                    <Grid container>
-                                      <Grid item xs={12} md={12}>
-                                      </Grid>
-                                      <Grid item xs={12} md={12}>
-                                      </Grid>
-                                    </Grid>
-                                  </CardContent>
-                                </Card>
-                              </Grid>
-                          </Grid>
-                      </Grid>
-                  </Grid>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Close</Button>
-                </DialogActions>
-              </Dialog>
-              <Tooltip arrow title="View more details."><IconButton onClick={viewRequest}  aria-label="accept" color="primary" onClick={handleClickOpen}><OpenInNew/></IconButton></Tooltip>
+              <Tooltip arrow title="View more details."><IconButton onClick={() => { router.push("/dashboard/artist/requests/"+params.row["id"])}}  aria-label="accept" color="primary" ><OpenInNew/></IconButton></Tooltip>
               {((params.row.accepted==false && params.row.declined==false && params.row.completed==false) ? (
                   <>
                   <Tooltip arrow title="Accept this request.">

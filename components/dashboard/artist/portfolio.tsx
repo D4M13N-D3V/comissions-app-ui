@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {ImageList, Box, Typography, CircularProgress} from '@mui/material';
 import { useEffect, useState } from "react";
-import ArtistPortfolioImage from './artistPortfolioImage';
-
+import ArtistPortfolioImage from './portfolioImage';
 const ArtistPortfolio = ({masonry,columns,artistId}) => {
   const [portfolioData, setPortfolioData] = useState([]);
   const [profileId, setArtistId] = useState(artistId)

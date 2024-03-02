@@ -18,19 +18,19 @@ import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0/client'
 import Button from '@mui/material/Button'
 import { CardContent } from '@mui/material'
-import Onboarding from '../../components/Onboarding'
+import Onboarding from '../../components/dashboard/Onboarding'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import router from 'next/router'
 import { isObject } from 'util'
-import Orders from '../../components/Orders'
+import Orders from '../../components/dashboard/customer/orders'
 import StatisticsCard from '../../views/dashboard/StatisticsCard'
 import ArtistStats from '../../components/ArtistStats'
 import { ArrowDownBox, BankTransfer, Cash, Clipboard, CubeOutline, StarOutline } from 'mdi-material-ui'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tooltip from '@mui/material/Tooltip'
 import Box from '@mui/material/Box'
-import { Fullscreen, OpenInBrowser, Settings, WebAsset } from '@mui/icons-material'
+import { Fullscreen, List, OpenInBrowser, Settings, WebAsset } from '@mui/icons-material'
 
 
 
@@ -103,8 +103,8 @@ const Dashboard = () => {
               <Grid item xs={12} md={4} sx={{textAlign:"center"}}>
               </Grid>
               <Grid item xs={12} md={5} sx={{textAlign:"right"}}>
-                <Tooltip title="Open an expanded view of your requests  .">
-                  <IconButton color="info" onClick={()=>{router.push("/dashboard/requests")}}><Fullscreen/></IconButton>
+                <Tooltip title="View all of your requests.">
+                  <IconButton color="info" onClick={()=>{router.push("/dashboard/requests")}}><List/></IconButton>
                 </Tooltip>
               </Grid>
               <Grid item xs={12} md={12} sx={{paddingTop:"2%"}}>
@@ -133,14 +133,14 @@ const Dashboard = () => {
                     )}
                   </Grid>
                   <Grid item xs={12} md={12}>
-                    <Tooltip title="Open an expanded view of your reviews.">
+                    <Tooltip title="View all of your reviews.">
                       <IconButton color="info" onClick={() => {router.push("/dashboard/artist/reviews")  }} size="large">
                         <StarOutline style={{ fontSize: 64 }} />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Open an expanded view of your requests.">
+                    <Tooltip title="View all of your requests.">
                       <IconButton color="info" onClick={() => {router.push("/dashboard/artist/requests")  }} size="large">
-                        <CubeOutline style={{ fontSize: 64 }} />
+                        <List  style={{ fontSize: 64 }} />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="View your payouts and request related transactions.">

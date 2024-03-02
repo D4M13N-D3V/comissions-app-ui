@@ -7,13 +7,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from "react";
-import EditableArtistPortfolio from "../../../components/editableArtistPortfolio";
-import ArtistPortfolio from "../../../components/artistPortfolio";
+import EditableArtistPortfolio from "../../../components/dashboard/artist/editablePortfolio";
+import ArtistPortfolio from "../../../components/dashboard/artist/portfolio";
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Rating from '@mui/material/Rating';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import Reviews from "../../../components/reviews";
+import Reviews from "../../../components/dashboard/artist/reviews";
 
 const Profile = () => {
 
