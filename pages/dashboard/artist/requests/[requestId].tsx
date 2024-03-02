@@ -170,7 +170,7 @@ const ArtistRequestDetails = () => {
                             </Tooltip>
                               <label htmlFor="uploadInput">
                                 <Tooltip arrow title="Upload asset image for customer.">
-                                  <IconButton disabled={request.completed} component="span" color="info"><UploadBoxOutline/></IconButton>
+                                  <IconButton disabled={request.completed && request.paid} component="span" color="info"><UploadBoxOutline/></IconButton>
                                 </Tooltip>
                               </label>
                             <Tooltip arrow title="Complete this request.">
