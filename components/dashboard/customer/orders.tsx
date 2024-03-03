@@ -13,11 +13,14 @@ import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import { useEffect, useState } from "react";
+import { useMediaQuery } from '@mui/material';
 
 import dayjs from 'dayjs';
 
 
 export default function CustomerOrders() {
+    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm')); // Check if the screen size is small
+
     const columns = [
       { field: 'id', headerName: 'ID', flex: 0.1},
       { field: 'status', headerName: 'Status', flex: 0.15,
@@ -42,12 +45,15 @@ export default function CustomerOrders() {
             }
         }
     },
-      { field: 'amount', headerName: 'Amount', flex: 0.1, renderCell: (params) => {
+      { field: 'amount', headerName: '$', flex: 0.1, renderCell: (params) => {
         return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
       }},
-      { field: 'requestDate', headerName: 'Request Date', flex:0.15, type: 'date' ,
-        valueGetter: (params) => { return new Date(params.row.requestDate); }} 
     ];
+    if(!isSmallScreen){
+      columns.push(
+        { field: 'requestDate', headerName: 'Request Date', flex:0.15, type: 'date' ,
+          valueGetter: (params) => { return new Date(params.row.requestDate); }} );
+    }
   const [isLoading, setIsLoading] = React.useState(true);
   const [requestCount, setRequestCount] = React.useState(null);  
   const [requestData, setRequestData] = React.useState({});  

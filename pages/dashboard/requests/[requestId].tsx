@@ -278,6 +278,15 @@ const RequestDetails = () => {
                                     disabled={!review || alreadyReviewed}
                                     onChange={handleRatingChange}/>
                                 </Grid>
+                                <Grid item xs={12} md={12}>
+                                    {request.completed ? (
+                                      request.reviewed ? (
+                                        <Alert sx={{width:"100%"}} severity="info">You have reviewed this request so others know the quality of this artists work!</Alert>
+                                      ):(
+                                        <Alert sx={{width:"100%"}} severity="warning">Please leave a review for this request so other users know the quality of this artists work!</Alert>
+                                      )
+                                    ): null}
+                                </Grid>
                               </Grid>
                               </Paper>
                             </Grid>

@@ -21,130 +21,239 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import { Card, CardHeader } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from '@mui/material';
-import RequestReferences from '../../../components/requestReferences';
-
+import { useMediaQuery } from '@mui/material';
 export default function ServerPaginationGrid() {
+  const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm')); // Check if the screen size is small
+
   const router = useRouter();
-  const columns = [
-    { field: 'id', headerName: 'ID', flex: 0.1},
-    { field: 'status', headerName: 'Status', flex: 0.15,
-      renderCell: (params) => {
-        if(params.row.completed){
-            return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
+  let columns = []
+  if(isSmallScreen){
+    columns = [
+      { field: 'id', headerName: 'ID', flex: 0.1, filterable: false, sortable: false},
+      { field: 'status', headerName: 'Status', flex: 0.15, filterable: false, sortable: false,
+        renderCell: (params) => {
+          if(params.row.completed){
+              return <Check color="success" />
+          }
+          else if(params.row.paid){
+              return <PriceCheckIcon color="success" />
+          }
+          else if(params.row.accepted && params.row.paid==false){
+              return <PriceCheckIcon color="warning" />
+          }
+          else if(params.row.accepted && params.row.paid){
+              return <AssignmentTurnedInIcon color="info" />
+          }
+          else if(params.row.declined){
+              return <AssignmentLateIcon color="error" />
+          }
+          else{
+              return <Refresh color="secondary" />
+          }
         }
-        else if(params.row.paid){
-            return <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
-        }
-        else if(params.row.accepted && params.row.paid==false){
-            return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
-        }
-        else if(params.row.accepted && params.row.paid){
-            return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="outlined" color="info" />
-        }
-        else if(params.row.declined){
-            return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
-        }
-        else{
-            return <Chip icon={<Refresh />} label="Pending" variant="outlined" color="secondary" />
-        }
-      }
-  },
-    { field: 'message', headerName: 'Message', flex: 0.5,
-      renderCell: (params) => {
-          return <TextField size="small" fullWidth value={params.row.message} disabled />;
+    },
+      { field: 'amount', headerName: 'Amount', flex: 0.15, filterable: false, sortable: false, renderCell: (params) => {
+        return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
       }},
-    { field: 'amount', headerName: 'Amount', flex: 0.1, renderCell: (params) => {
-      return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
-    }},
-    { field: 'requestDate', headerName: 'Request Date', flex:0.15, 
-      renderCell: (params) =>{
-
-          let formattedTime = ""
-          const date = new Date(params.row.requestDate);  
-          formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
-          return <DateField
-          size='small'
-          disabled
-          defaultValue={dayjs(params.row.requestDate)}
-          format="LL"
-        />
-      } },
-      { field: 'action', headerName: '', flex:0.15, 
+        { field: 'action', headerName: '', flex:0.1, filterable: false, sortable: false, 
+          renderCell: (params) =>{
+  
+              const acceptRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/accept", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const viewRequest = async () => {
+  
+              }
+  
+              const denyRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/deny", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const completeRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/complete", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const [open, setOpen] = React.useState(false);
+                
+              const handleClickOpen = () => {
+                setOpen(true);
+              };
+            
+              const handleClose = () => {
+                setOpen(false);
+              };
+  
+              let formattedTime = ""
+              const date = new Date(params.row.requestDate);  
+              formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
+  
+              return (<>
+                <Tooltip arrow title="View more details."><IconButton onClick={() => { router.push("/dashboard/artist/requests/"+params.row["id"])}}  aria-label="accept" color="primary" ><OpenInNew/></IconButton></Tooltip>
+                {((params.row.accepted==false && params.row.declined==false && params.row.completed==false) ? (
+                    <>
+                    <Tooltip arrow title="Accept this request.">
+                    <IconButton onClick={acceptRequest}  aria-label="accept" color="success"><Check/></IconButton>
+                  </Tooltip>
+                    <Tooltip arrow title="Deny this request.">
+                      <IconButton  onClick={denyRequest} aria-label="deny" sx={{marginLeft:"2px"}} color="error"><Close/></IconButton>
+                    </Tooltip>
+                    </>
+                ): null
+                )}
+                {((params.row.accepted==true && params.row.declined==false && params.row.completed==false && params.row.paid==true) ? (
+                    <>
+                    <Tooltip arrow title="Complete this request.">
+                      <IconButton onClick={completeRequest}  aria-label="complete" color="success"><ClipboardCheck/></IconButton>
+                    </Tooltip>
+                    </>
+                ): null
+                )}
+            </>
+            )
+          } }
+    ];
+  }
+  else{
+    columns = [
+      { field: 'id', headerName: 'ID', flex: 0.1, filterable: false, sortable: false},
+      { field: 'status', headerName: 'Status', flex: 0.15, filterable: false, sortable: false, filterable: false,
+        renderCell: (params) => {
+          if(params.row.completed){
+              return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
+          }
+          else if(params.row.paid){
+              return <Chip icon={<PriceCheckIcon />} label="Paid" variant="outlined" color="success" />
+          }
+          else if(params.row.accepted && params.row.paid==false){
+              return <Chip icon={<PriceCheckIcon />} label="Pending Payment" variant="outlined" color="warning" />
+          }
+          else if(params.row.accepted && params.row.paid){
+              return <Chip icon={<AssignmentTurnedInIcon />} label="Accepted" variant="outlined" color="info" />
+          }
+          else if(params.row.declined){
+              return <Chip icon={<AssignmentLateIcon />} label="Declined" variant="outlined" color="error" />
+          }
+          else{
+              return <Chip icon={<Refresh />} label="Pending" variant="outlined" color="secondary" />
+          }
+        }
+    },
+      { field: 'message', headerName: 'Message', flex: 0.5, filterable: false, sortable: false,
+        renderCell: (params) => {
+            return <TextField size="small" fullWidth value={params.row.message} disabled />;
+        }},
+      { field: 'amount', headerName: 'Amount', flex: 0.1, filterable: false, sortable: false, renderCell: (params) => {
+        return <CurrencyTextField size="small" fullWidth value={params.row.amount} currencySymbol="$" disabled />;
+      }},
+      { field: 'requestDate', headerName: 'Request Date', flex:0.15, filterable: false, sortable: false, 
         renderCell: (params) =>{
-
-            const acceptRequest = async () => {
-              let response = await fetch('/api/artist/requests/'+params.row["id"]+"/accept", { method: 'PUT' })
-              if(response.status === 200){
-                router.push("/dashboard/artist/requests/"+params.row["id"])
-              }
-              else{
-                alert("Error accepting request.")
-              }
-            }
-
-            const viewRequest = async () => {
-
-            }
-
-            const denyRequest = async () => {
-              let response = await fetch('/api/artist/requests/'+params.row["id"]+"/deny", { method: 'PUT' })
-              if(response.status === 200){
-                router.push("/dashboard/artist/requests/"+params.row["id"])
-              }
-              else{
-                alert("Error accepting request.")
-              }
-            }
-
-            const completeRequest = async () => {
-              let response = await fetch('/api/artist/requests/'+params.row["id"]+"/complete", { method: 'PUT' })
-              if(response.status === 200){
-                router.push("/dashboard/artist/requests/"+params.row["id"])
-              }
-              else{
-                alert("Error accepting request.")
-              }
-            }
-
-            const [open, setOpen] = React.useState(false);
-              
-            const handleClickOpen = () => {
-              setOpen(true);
-            };
-          
-            const handleClose = () => {
-              setOpen(false);
-            };
-
+  
             let formattedTime = ""
             const date = new Date(params.row.requestDate);  
             formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
-
-            return (<>
-              <Tooltip arrow title="View more details."><IconButton onClick={() => { router.push("/dashboard/artist/requests/"+params.row["id"])}}  aria-label="accept" color="primary" ><OpenInNew/></IconButton></Tooltip>
-              {((params.row.accepted==false && params.row.declined==false && params.row.completed==false) ? (
-                  <>
-                  <Tooltip arrow title="Accept this request.">
-                  <IconButton onClick={acceptRequest}  aria-label="accept" color="success"><Check/></IconButton>
-                </Tooltip>
-                  <Tooltip arrow title="Deny this request.">
-                    <IconButton  onClick={denyRequest} aria-label="deny" sx={{marginLeft:"2px"}} color="error"><Close/></IconButton>
+            return <DateField
+            size='small'
+            disabled
+            defaultValue={dayjs(params.row.requestDate)}
+            format="LL"
+          />
+        } },
+        { field: 'action', headerName: '', flex:0.15, filterable: false, sortable: false, 
+          renderCell: (params) =>{
+  
+              const acceptRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/accept", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const viewRequest = async () => {
+  
+              }
+  
+              const denyRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/deny", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const completeRequest = async () => {
+                let response = await fetch('/api/artist/requests/'+params.row["id"]+"/complete", { method: 'PUT' })
+                if(response.status === 200){
+                  router.push("/dashboard/artist/requests/"+params.row["id"])
+                }
+                else{
+                  alert("Error accepting request.")
+                }
+              }
+  
+              const [open, setOpen] = React.useState(false);
+                
+              const handleClickOpen = () => {
+                setOpen(true);
+              };
+            
+              const handleClose = () => {
+                setOpen(false);
+              };
+  
+              let formattedTime = ""
+              const date = new Date(params.row.requestDate);  
+              formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
+  
+              return (<>
+                <Tooltip arrow title="View more details."><IconButton onClick={() => { router.push("/dashboard/artist/requests/"+params.row["id"])}}  aria-label="accept" color="primary" ><OpenInNew/></IconButton></Tooltip>
+                {((params.row.accepted==false && params.row.declined==false && params.row.completed==false) ? (
+                    <>
+                    <Tooltip arrow title="Accept this request.">
+                    <IconButton onClick={acceptRequest}  aria-label="accept" color="success"><Check/></IconButton>
                   </Tooltip>
-                  </>
-              ): null
-              )}
-              {((params.row.accepted==true && params.row.declined==false && params.row.completed==false && params.row.paid==true) ? (
-                  <>
-                  <Tooltip arrow title="Complete this request.">
-                    <IconButton onClick={completeRequest}  aria-label="complete" color="success"><ClipboardCheck/></IconButton>
-                  </Tooltip>
-                  </>
-              ): null
-              )}
-          </>
-          )
-        } }
-  ];
+                    <Tooltip arrow title="Deny this request.">
+                      <IconButton  onClick={denyRequest} aria-label="deny" sx={{marginLeft:"2px"}} color="error"><Close/></IconButton>
+                    </Tooltip>
+                    </>
+                ): null
+                )}
+                {((params.row.accepted==true && params.row.declined==false && params.row.completed==false && params.row.paid==true) ? (
+                    <>
+                    <Tooltip arrow title="Complete this request.">
+                      <IconButton onClick={completeRequest}  aria-label="complete" color="success"><ClipboardCheck/></IconButton>
+                    </Tooltip>
+                    </>
+                ): null
+                )}
+            </>
+            )
+          } }
+    ];
+  }
   const [isLoading, setIsLoading] = React.useState(true);
   const [requestCount, setRequestCount] = React.useState(null);  
   const [requestData, setRequestData] = React.useState({});  
