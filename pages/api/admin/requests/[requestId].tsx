@@ -2,11 +2,12 @@ import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-a
 
 export default withApiAuthRequired(async function onboardUrl(req, res) {
   const { accessToken } = await getAccessToken(req, res);
-  const { offset, pageSize } = req.body;
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/admin/AdminArtistRequests?offset='+offset+'&pageSize='+pageSize, {
+  const { requestId } = req.query;
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/admin/AdminArtistRequests/'+requestId, {
     headers: {
-      "Authorization": `Bearer ${accessToken}`
-    }
+      "Authorization": `Bearer ${accessToken}`,
+    },
+    method: req.method
   });
   if(response.ok==false){
     res.status(200).json({})
@@ -16,3 +17,4 @@ export default withApiAuthRequired(async function onboardUrl(req, res) {
   res.status(200).json(result);
 });
 
+// handles ACCEPT AND DENY

@@ -8,7 +8,7 @@ import ListIcon from '@mui/icons-material/List';
 // ** Type import
 import { VerticalNavItemsType } from '../../core/layouts/types'
 import { BankTransfer, Cart, Clipboard, PageFirst, StarOutline } from 'mdi-material-ui'
-import { DocumentScanner, FileOpen, OpenInBrowser, Settings, WebAsset } from '@mui/icons-material'
+import { DocumentScanner, FileOpen, LockPerson, OpenInBrowser, People, PeopleOutline, Settings, WebAsset } from '@mui/icons-material'
 import { useState, useEffect } from 'react'
 
 const navigation = (): VerticalNavItemsType => {
@@ -46,9 +46,19 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle: 'Admin'
     },
     {
-      title: 'Artist Requests',
-      icon: Clipboard,
+      title: 'Manage Artist Access',
+      icon: LockPerson,
       path: '/dashboard/admin/requests'
+    },
+    {
+      title: 'Manage Users',
+      icon: People,
+      path: '/dashboard/admin/users'
+    },
+    {
+      title: 'Manage Artists',
+      icon: PeopleOutline,
+      path: '/dashboard/admin/artists'
     },
     {
       sectionTitle: 'General'

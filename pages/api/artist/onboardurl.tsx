@@ -7,7 +7,9 @@ export default withApiAuthRequired(async function onboardUrl(req, res) {
       "Authorization": `Bearer ${accessToken}`
     }
   });
-  
+  if(response.ok==false){
+    res.status(200).json({})
+  }
   let result = await response.json();
   res.status(200).json(result);
 });
