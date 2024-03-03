@@ -15,9 +15,15 @@ const navigation = (): VerticalNavItemsType => {
   const [isStripeOnboarded, setIsStripeOnboarded] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const getData = async () => {
     
+    const adminCheck = await fetch('/api/admin/check', { method: "GET" });
+    if (adminCheck.status === 200) {
+      setIsAdmin(true);
+    }
+
     const onboardCheckRequest = await fetch('/api/artist/onboarded', { method: "GET" });
     const onboardCheckResponse = await onboardCheckRequest.json();
     setIsStripeOnboarded(onboardCheckResponse["onboarded"]);
@@ -43,24 +49,6 @@ const navigation = (): VerticalNavItemsType => {
       path: '/dashboard'
     },
     {
-      sectionTitle: 'Admin'
-    },
-    {
-      title: 'Manage Artist Access',
-      icon: LockPerson,
-      path: '/dashboard/admin/requests'
-    },
-    {
-      title: 'Manage Users',
-      icon: People,
-      path: '/dashboard/admin/users'
-    },
-    {
-      title: 'Manage Artists',
-      icon: PeopleOutline,
-      path: '/dashboard/admin/artists'
-    },
-    {
       sectionTitle: 'General'
     },
     {
@@ -74,6 +62,29 @@ const navigation = (): VerticalNavItemsType => {
       path: '/dashboard/requests'
     }
   ];
+
+  if (isAdmin) {
+    result.push(
+      {
+        sectionTitle: 'Admin'
+      },
+      {
+        title: 'Manage Artist Access',
+        icon: LockPerson,
+        path: '/dashboard/admin/requests'
+      },
+      {
+        title: 'Manage Users',
+        icon: People,
+        path: '/dashboard/admin/users'
+      },
+      {
+        title: 'Manage Artists',
+        icon: PeopleOutline,
+        path: '/dashboard/admin/artists'
+      },
+    );
+  }
 
   if (isStripeOnboarded) {
     result.push(
