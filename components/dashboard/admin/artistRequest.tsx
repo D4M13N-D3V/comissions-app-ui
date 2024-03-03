@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 
 
-export default function ArtistRequest({id,userid,username,message,date,reload}) {
+export default function AdminArtistRequest({id,userid,username,message,date,reload}) {
 
 
   useEffect(() => {

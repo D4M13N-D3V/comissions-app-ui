@@ -3,7 +3,7 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-export default withApiAuthRequired(async function references(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
     const { accessToken } = await getAccessToken(req, res);
     const requestId = req.query.requestId;
     const assetId = req.query.assetId;

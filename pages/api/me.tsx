@@ -3,7 +3,7 @@ import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 import { getAccessToken } from '@auth0/nextjs-auth0';
 
 
-export default withApiAuthRequired(async function me(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
     if(req.method !== 'GET') {
         ////console.log(req.body)
         const { accessToken } = await getAccessToken(req, res);

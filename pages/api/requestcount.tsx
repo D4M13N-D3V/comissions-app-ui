@@ -1,6 +1,6 @@
 import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
 
-export default withApiAuthRequired(async function onboardUrl(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
   const { accessToken } = await getAccessToken(req, res);
   const { completed, declined, accepted, paid, offset, pageSize } = req.body;
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/Requests/Customer/Count?completed=${completed}&declined=${declined}&accepted=${accepted}&paid=${paid}&offset=${offset}&pageSize=${pageSize}`;

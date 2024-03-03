@@ -23,7 +23,7 @@ import { profile } from "console";
 import FileOpen from "@mui/icons-material/FileOpen";
 import Reviews from "../../components/dashboard/artist/reviews";
 
-const Profile = () => {
+const ArtistBox = () => {
 
     const [profileData, setArtistData] = useState(null);
     const [description, setDescription] = useState("");
@@ -252,6 +252,6 @@ const Profile = () => {
 };
 
 // Protected route, checking user authentication client-side.(CSR)
-export default withPageAuthRequired(Profile);
+export default withPageAuthRequired(ArtistBox);
 
 

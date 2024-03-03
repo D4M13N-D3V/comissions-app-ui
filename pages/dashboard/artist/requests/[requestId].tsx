@@ -293,11 +293,12 @@ const ArtistRequestDetails = () => {
   )
   :(
     <>
+      <Box sx={{paddingTop:"20%", textAlign:"center"}}>
         <Typography variant="h6" component="h6" gutterBottom>
             Loading...
         </Typography>
-        <Box sx={{paddingTop:"20%"}}></Box>
         <CircularProgress/>
+      </Box>
     </>
   )}
 </>
