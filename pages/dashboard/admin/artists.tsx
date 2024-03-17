@@ -65,7 +65,7 @@ export default function AdminArtists() {
                 }
             }},
             { field: 'actions', headerName: '', flex: 0.05, sortable: false, filterable: false, renderCell: (params) => {
-                return <Tooltip title="View more information about this user."><IconButton color="info" onClick={() => router.push("/dashboard/admin/users/"+params.row.id)}><OpenInNew /></IconButton></Tooltip>
+                return <Tooltip title="View more information about this user."><IconButton color="info" onClick={() => router.push("/dashboard/admin/artists/"+params.row.id)}><OpenInNew /></IconButton></Tooltip>
             }}
         ];
     }

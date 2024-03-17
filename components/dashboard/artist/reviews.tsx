@@ -4,10 +4,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from 'next/router';
 import { Rating } from '@mui/material';
-import dayjs from 'dayjs';
-
-import CurrencyTextField from '@lupus-ai/mui-currency-textfield';
-import { DateField } from '@mui/x-date-pickers';
 
 export default function Reviews({artistId}) {
     const router = useRouter();
@@ -30,15 +26,19 @@ export default function Reviews({artistId}) {
   const getReviews = async () => {
     setIsLoading(true);
     const response = await fetch('/api/discovery/artist/'+artistId+'/reviews', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
     const data = await response.json();
-    setReviewData(data);
+    // Assuming your API returns an array under a key like 'reviews'
+    // Adjust this according to your actual API response structure
+    const rows = data.reviews || []; // If 'reviews' doesn't exist, default to an empty array
+    setReviewData(rows);
     setIsLoading(false);
   }
+  
   const getReviewsCount = async () => {
     const response = await fetch('/api/discovery/artist/'+artistId+'/reviewscount', {
         method: 'GET',

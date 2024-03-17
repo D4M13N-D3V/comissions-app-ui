@@ -3,7 +3,7 @@ import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-a
 export default withApiAuthRequired(async function handler(req, res) {
   const { accessToken } = await getAccessToken(req, res);
   const { artistId } = req.query;
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/admin/AdminArtists/'+userId, {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/admin/AdminArtists/'+artistId, {
     headers: {
       "Authorization": `Bearer ${accessToken}`
     }

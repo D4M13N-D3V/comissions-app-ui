@@ -45,8 +45,8 @@ export default function AdminUsers() {
             { field: 'id', headerName: 'User ID', flex: 0.2, sortable: false, filterable: false},
             { field: 'displayName', headerName: 'Display Name', flex: 0.15, sortable: false, filterable: false},
             { field: 'email', headerName: 'Email', flex: 0.2, sortable: false, filterable: false},
-            { field: "requestCount", headerName: "# of Requests", flex: 0.1, sortable: false, filterable: false},
-            { field: "reviewCount", headerName: "# of Reviews", flex: 0.1, sortable: false, filterable: false},
+            { field: "numberOfRequests", headerName: "# of Requests", flex: 0.1, sortable: false, filterable: false},
+            { field: "numberOfReviews", headerName: "# of Reviews", flex: 0.1, sortable: false, filterable: false},
             { field: "amountSpent", headerName: "Amount Spent", flex: 0.1, sortable: false, filterable: false},
             { field: 'status', headerName: 'Status', flex: 0.1, sortable: false, filterable: false, renderCell: (params) =>{
                 if(params.row.banned){
