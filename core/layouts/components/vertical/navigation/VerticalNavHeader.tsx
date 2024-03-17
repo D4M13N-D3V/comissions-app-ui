@@ -61,7 +61,6 @@ const VerticalNavHeader = (props: Props) => {
       ) : (
         <Link href='/' passHref>
           <StyledLink>
-            <img width={30} height={25} src= "https://s6.imgcdn.dev/ttLwl.png"/>
             <HeaderTitle variant='h6' sx={{ ml: 3 }}>
               {themeConfig.templateName}
             </HeaderTitle>

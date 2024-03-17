@@ -92,12 +92,20 @@ const AdminRequest = () => {
                                     {request?.message}
                                 </TextField>
                         </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Button fullWidth disabled={request?.accepted} variant="contained" onClick={handleAccept} color="primary">Accept</Button>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Button fullWidth disabled={request?.accepted} variant="contained" onClick={handleDeny} color="secondary">Reject</Button>
-                        </Grid>
+                        {request?.accepted ? (
+                            <Grid item xs={12} md={12}>
+                                <Button fullWidth  variant="contained" onClick={handleAccept} color="error">Revoke Artist Access</Button>
+                            </Grid>
+                        ):(
+                        <>
+                            <Grid item xs={12} md={6}>
+                                <Button fullWidth  variant="contained" onClick={handleAccept} color="primary">Accept</Button>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Button fullWidth variant="contained" onClick={handleDeny} color="secondary">Reject</Button>
+                            </Grid>
+                        </>
+                        )}
                     </Grid>
                 </Grid>
                 <Grid item xs={6}>
