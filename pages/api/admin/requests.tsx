@@ -8,7 +8,6 @@ export default withApiAuthRequired(async function handler(req, res) {
       "Authorization": `Bearer ${accessToken}`
     }
   });
-  console.log(response)
   if(response.ok==false){
     res.status(200).json({})
     return;
