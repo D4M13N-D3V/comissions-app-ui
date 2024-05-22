@@ -69,7 +69,7 @@ export default function Onboarding() {
   }, []);
 
   const requestButton = () => {
-    fetch('/api/artist/newRequest', {headers:{ "Content-Header":"application/json"},method:"POST",body:JSON.stringify(requestMessage)}).then((response) => {
+    fetch('/api/artist/artistAccessRequest', {headers:{ "Content-Header":"application/json"},method:"POST",body:JSON.stringify(requestMessage)}).then((response) => {
       if (response.ok) {
         fetch('/api/artist/request').then((requestResponse) => {
           requestResponse.json().then((sellerRequest) => {
