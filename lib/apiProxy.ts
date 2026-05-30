@@ -70,7 +70,11 @@ async function forward(req: NextApiRequest, res: NextApiResponse, config: ProxyC
   res.status(upstream.status);
   const text = await upstream.text();
   if (!text) {
-    res.end();
+    // Many callers do `await res.json()` without checking the status, and the
+    // core API legitimately returns empty bodies (e.g. 404 when a resource does
+    // not exist yet). Emit `{}` so those callers don't throw, while the real
+    // status code is still propagated for code that does check it.
+    res.json({});
     return;
   }
   const contentType = upstream.headers.get('content-type');
