@@ -129,7 +129,6 @@ export default function AdminUsers() {
   return (
     
     <div style={{ height: '100%', width: '100%' }}>
-    <Button target="_blank" href="https://manage.auth0.com/dashboard">Open Auth0 Dashboard</Button>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
         rows={requestData}
