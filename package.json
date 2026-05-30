@@ -27,7 +27,7 @@
     "jwt-decode": "^4.0.0",
     "mdi-material-ui": "^7.8.0",
     "mui-color-input": "^2.0.2",
-    "next": "latest",
+    "next": "14.1.0",
     "node-fetch": "^3.3.2",
     "nprogress": "^0.2.0",
     "openapi-typescript-fetch": "^1.1.3",
