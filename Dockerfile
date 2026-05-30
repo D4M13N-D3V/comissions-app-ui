@@ -1,35 +1,38 @@
-FROM node:18-alpine as base
-RUN apk add --no-cache g++ make py3-pip libc6-compat
+FROM node:18-alpine AS base
 WORKDIR /app
-COPY package*.json ./
-EXPOSE 3000
 
-FROM base as builder
+# Install dependencies (with build toolchain for any native modules).
+FROM base AS deps
+RUN apk add --no-cache g++ make py3-pip libc6-compat
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Build the application.
+FROM base AS builder
 WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-
-FROM base as production
-WORKDIR /app
-
+# Production runtime: only the built output + production deps, as non-root.
+FROM base AS production
 ENV NODE_ENV=production
-RUN npm ci
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-USER nextjs
-
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-CMD npm start
+USER nextjs
+EXPOSE 3000
+CMD ["npm", "start"]
 
-FROM base as dev
+# Development image with hot reload.
+FROM deps AS dev
 ENV NODE_ENV=development
-RUN npm install 
+WORKDIR /app
 COPY . .
-CMD npm run dev
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
