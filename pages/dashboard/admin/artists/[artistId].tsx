@@ -102,3 +102,5 @@ const AdminArtist = () => {
 export default withPageAuthRequired(AdminArtist);
 
 
+
+export { getServerSideProps } from '../../../../lib/requireAdmin';
