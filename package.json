@@ -24,7 +24,7 @@
     "@mui/lab": "^5.0.0-alpha.165",
     "@mui/material": "^5.15.6",
     "@mui/x-data-grid": "^6.19.4",
-    "@mui/x-date-pickers": "^6.19.4",
+    "@mui/x-date-pickers": "^9.3.0",
     "@novu/notification-center": "^0.22.0",
     "@types/formidable": "^3.4.5",
     "apexcharts": "^3.45.2",
