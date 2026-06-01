@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.2...v1.0.3) (2026-06-01)
+
+
+### Bug Fixes
+
+* **dashboard:** stop infinite fetch loop on list pages ([c7194ed](https://github.com/D4M13N-D3V/comissions-app-ui/commit/c7194edf1cfa4abb4ae1d674fd374b4db19bce55))
+
 ## [1.0.2](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.1...v1.0.2) (2026-06-01)
 
 
