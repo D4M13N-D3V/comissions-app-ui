@@ -145,3 +145,4 @@ export default function AdminUsers() {
     </div>
   );
 }
+export { getServerSideProps } from '../../../lib/requireAdmin';

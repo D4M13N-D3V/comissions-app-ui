@@ -102,3 +102,5 @@ const AdminUser = () => {
 export default withPageAuthRequired(AdminUser);
 
 
+
+export { getServerSideProps } from '../../../../lib/requireAdmin';

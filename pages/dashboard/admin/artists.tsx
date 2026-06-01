@@ -149,3 +149,4 @@ export default function AdminArtists() {
     </div>
   );
 }
+export { getServerSideProps } from '../../../lib/requireAdmin';
