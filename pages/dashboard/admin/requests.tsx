@@ -38,7 +38,7 @@ export default function AdminRequests() {
             { field: 'message', headerName: 'Message', flex: 0.2, sortable: false, filterable: false},
             { field: 'actions', headerName: '', flex: 0.15, sortable: false, filterable: false, renderCell: (params) => {
                 const handleAccept = async () => {
-                    var response = await fetch("/api/admin/requests/"+params.row.userId, {method:"PUT"})
+                    var response = await fetch("/api/admin/requests/"+params.row.id, {method:"PUT"})
                     if(response.ok){
                         var data = await response.json();
                         router.reload();
@@ -48,7 +48,7 @@ export default function AdminRequests() {
                     }
                 }
                 const handleDeny = async () => {
-                    var response = await fetch("/api/admin/requests/"+params.row.userId, {method:"DELETE"})
+                    var response = await fetch("/api/admin/requests/"+params.row.id, {method:"DELETE"})
                     if(response.ok){
                         var data = await response.json();
                         router.reload();
@@ -86,7 +86,7 @@ export default function AdminRequests() {
             }},
             { field: 'actions', headerName: '', flex: 0.15, sortable: false, filterable: false, renderCell: (params) => {
                 const handleAccept = async () => {
-                    var response = await fetch("/api/admin/requests/"+params.row.userId, {method:"PUT"})
+                    var response = await fetch("/api/admin/requests/"+params.row.id, {method:"PUT"})
                     if(response.ok){
                         var data = await response.json();
                         router.reload();
@@ -96,7 +96,7 @@ export default function AdminRequests() {
                     }
                 }
                 const handleDeny = async () => {
-                    var response = await fetch("/api/admin/requests/"+params.row.userId, {method:"DELETE"})
+                    var response = await fetch("/api/admin/requests/"+params.row.id, {method:"DELETE"})
                     if(response.ok){
                         var data = await response.json();
                         router.reload();
