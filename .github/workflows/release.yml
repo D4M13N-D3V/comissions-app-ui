@@ -23,6 +23,11 @@ env:
   # can push it. Must stay lowercase (GHCR rejects uppercase references).
   # Point ArgoCD at this path.
   IMAGE: ghcr.io/d4m13n-d3v/comissions-app-ui
+  # Baked into the client bundle at build time (Next.js inlines NEXT_PUBLIC_* during
+  # `npm run build`). Must match the runtime NEXT_PUBLIC_API_URL the image is deployed
+  # with, and the value ci.yml bakes into :latest. Override via repo variable if the
+  # API host moves; the default is the demo's public API origin.
+  NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'https://api.commissions.demos.d4m13n.dev' }}
 
 jobs:
   release:
@@ -119,6 +124,8 @@ jobs:
           target: production
           load: true
           tags: ${{ env.IMAGE }}:scan
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -139,5 +146,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
