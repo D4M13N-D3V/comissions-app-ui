@@ -1,13 +1,7 @@
-export default async function handler(req, res  ): Promise<any>  {
-    const { sellerId } = req.query;
-    var url = process.env.NEXT_PUBLIC_API_URL+`/api/Discovery/Artists/${sellerId}/Portfolio`;
-    (url)
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error('Failed to fetch seller portfolio');
-    }
-    var result = await response.json();
-    (result)
-    res.status(200).json(result);
-}
+import { createApiProxy } from '@/lib/apiProxy';
 
+export default createApiProxy({
+  path: req => `/api/Discovery/Artists/${req.query.sellerId}/Portfolio`,
+  method: 'GET',
+  auth: false,
+});
