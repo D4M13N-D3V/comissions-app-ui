@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.5...v1.0.6) (2026-06-01)
+
+
+### Bug Fixes
+
+* **admin:** accept/deny artist request by request id, not userId ([0ec4fab](https://github.com/D4M13N-D3V/comissions-app-ui/commit/0ec4fabe47baf249a7fe25edde9a3498b52f3f34))
+
 ## [1.0.5](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.4...v1.0.5) (2026-06-01)
 
 
