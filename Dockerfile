@@ -12,10 +12,12 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* vars are inlined into the client bundle at build time, so the
-# API URL must be present here (not just at container runtime) or client-rendered
-# URLs resolve to `undefined/api/...`.
-ARG NEXT_PUBLIC_API_URL
+# NEXT_PUBLIC_* vars are inlined into the client bundle at build time. To keep
+# the API URL overridable at container runtime, we bake a unique placeholder URL
+# here and rewrite it to the real value at startup (see docker-entrypoint.sh).
+# Passing a real --build-arg NEXT_PUBLIC_API_URL still works (the entrypoint then
+# finds no placeholder to replace and is a no-op).
+ARG NEXT_PUBLIC_API_URL=https://runtime-api-url.invalid
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
@@ -38,7 +40,10 @@ RUN npm ci --omit=dev
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --chown=nextjs:nodejs docker-entrypoint.sh ./docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
 USER nextjs
 EXPOSE 3000
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["npm", "start"]
