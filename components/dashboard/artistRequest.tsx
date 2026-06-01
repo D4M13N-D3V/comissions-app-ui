@@ -10,17 +10,18 @@ const ArtistOnboardRequest = () => {
   
     const getData = async () => {
       const response = await fetch('/api/artist/request');
-      const sellerProfile = await response.json();
-      setArtistRequestData(sellerProfile);
+      const sellerProfile = response.ok ? await response.json() : null;
+      setArtistRequestData(sellerProfile && sellerProfile.id ? sellerProfile : null);
     }
     useEffect(() => {
       getData();
     }, []);
 
     let formattedTime = ""
-    if (sellerRequestData) {
+    if (sellerRequestData && sellerRequestData["requestDate"]) {
       const date = new Date(sellerRequestData["requestDate"]);
-      formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
+      if (!isNaN(date.getTime()))
+        formattedTime = date.toLocaleString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
     return (

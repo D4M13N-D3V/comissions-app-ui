@@ -56,8 +56,10 @@ export default function Onboarding() {
     const onboardUrlResponse = await onboardUrlRequest.json();
     setOnBoardUrl(onboardUrlResponse["onboardUrl"]);
     const response = await fetch('/api/artist/request');
-    const sellerRequest = await response.json();
-    setArtistRequestData(sellerRequest);
+    // Only a real 200 with an actual request row counts. The proxy returns `{}`
+    // (or an error body) for 404/403, which must NOT be treated as a pending request.
+    const sellerRequest = response.ok ? await response.json() : null;
+    setArtistRequestData(sellerRequest && sellerRequest.id ? sellerRequest : null);
     const profileResponse = await fetch('/api/artist/profile');
     const sellerProfile = await profileResponse.json();
     setArtistData(sellerProfile); // Poll every 5 seconds (adjust as needed)
@@ -69,11 +71,12 @@ export default function Onboarding() {
   }, []);
 
   const requestButton = () => {
-    fetch('/api/artist/newRequest', {headers:{ "Content-Header":"application/json"},method:"POST",body:JSON.stringify(requestMessage)}).then((response) => {
+    fetch('/api/artist/newRequest', {headers:{ "Content-Type":"application/json"},method:"POST",body:JSON.stringify(requestMessage)}).then((response) => {
       if (response.ok) {
         fetch('/api/artist/request').then((requestResponse) => {
+          if (!requestResponse.ok) return;
           requestResponse.json().then((sellerRequest) => {
-            setArtistRequestData(sellerRequest);
+            if (sellerRequest && sellerRequest.id) setArtistRequestData(sellerRequest);
           });
         });
       }
@@ -81,9 +84,10 @@ export default function Onboarding() {
   }
 
   let formattedTime = ""
-  if (sellerRequestData) {
+  if (sellerRequestData && sellerRequestData["requestDate"]) {
     const date = new Date(sellerRequestData["requestDate"]);
-    formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
+    if (!isNaN(date.getTime()))
+      formattedTime = date.toLocaleString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
   return (
