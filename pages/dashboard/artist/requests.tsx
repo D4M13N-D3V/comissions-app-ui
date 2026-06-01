@@ -298,7 +298,7 @@ export default function ServerPaginationGrid() {
   React.useEffect(() => {
      getRequestsCount();
      getRequests();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     <div style={{ height: '100%', width: '100%' }}>

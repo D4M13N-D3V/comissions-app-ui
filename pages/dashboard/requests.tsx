@@ -217,7 +217,7 @@ export default function ServerPaginationGrid() {
   React.useEffect(() => {
     getRequests();
      getRequestsCount();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     

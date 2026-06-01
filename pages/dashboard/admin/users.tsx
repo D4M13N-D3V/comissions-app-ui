@@ -124,7 +124,7 @@ export default function AdminUsers() {
   React.useEffect(() => {
     getRequests();
      getRequestsCount();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     

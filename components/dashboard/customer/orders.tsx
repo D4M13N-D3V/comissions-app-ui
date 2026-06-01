@@ -114,7 +114,7 @@ export default function CustomerOrders() {
   React.useEffect(() => {
     getRequests();
      getRequestsCount();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     <div style={{ width: '100%' }}>

@@ -129,7 +129,7 @@ export default function AdminArtists() {
   React.useEffect(() => {
     getRequests();
      getRequestsCount();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     

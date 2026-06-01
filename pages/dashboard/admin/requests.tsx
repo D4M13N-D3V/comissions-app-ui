@@ -184,7 +184,7 @@ export default function AdminRequests() {
   React.useEffect(() => {
     getRequests();
      getRequestsCount();
-  }, [requestCount, setRowCountState,paginationModel]);
+  }, [setRowCountState, paginationModel]);
 
   return (
     
