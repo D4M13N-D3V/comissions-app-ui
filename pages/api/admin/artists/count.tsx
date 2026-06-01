@@ -1,3 +1,3 @@
 import { createApiProxy } from '@/lib/apiProxy';
 
-export default createApiProxy({ path: '/api/admin/AdminArtists/Count', method: 'GET' });
+export default createApiProxy({ path: '/api/admin/AdminArtists/Count', method: 'GET', allowedMethods: ['POST'] });
