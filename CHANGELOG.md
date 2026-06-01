@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.1...v1.0.2) (2026-06-01)
+
+
+### Bug Fixes
+
+* **docker:** make NEXT_PUBLIC_API_URL overridable at runtime ([a76c378](https://github.com/D4M13N-D3V/comissions-app-ui/commit/a76c378457bf8978c99577dcd4979ecc05fbb24e))
+
 ## [1.0.1](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.0...v1.0.1) (2026-06-01)
 
 
