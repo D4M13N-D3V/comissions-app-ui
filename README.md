@@ -1,73 +1,136 @@
-# Next.js and Auth0 Example
+# Request.Box — Web UI
 
-This example shows how you can use `@auth0/nextjs-auth` to easily add authentication support to your Next.js application. It tries to cover a few topics:
+The web frontend for **Request.Box**, a platform where artists let their followers request commissioned art pieces while keeping full control over their terms, pricing, and timeframe.
 
-- Signing in
-- Signing out
-- Loading the user on the server side and adding it as part of SSR ([`pages/advanced/ssr-profile.tsx`](pages/advanced/ssr-profile.tsx))
-- Loading the user on the client side and using fast/cached SSR pages ([`pages/index.tsx`](pages/index.tsx))
-- Loading the user on the client side and checking authentication CSR pages ([`pages/profile.tsx`](pages/profile.tsx))
-- Loading the user on the client side by accessing API (Serverless function) CSR pages ([`pages/advanced/api-profile.tsx`](pages/advanced/api-profile.tsx))
-- Creates route handlers under the hood that perform different parts of the authentication flow ([`pages/auth/[...auth0].tsx`](pages/auth/[...auth0].tsx))
+This repository is the **Next.js** application that customers, artists, and admins interact with. It does not talk to the database directly — it acts as a **backend-for-frontend (BFF)**, proxying authenticated requests through to the core API.
 
-Read more: [https://auth0.com/blog/ultimate-guide-nextjs-authentication-auth0/](https://auth0.com/blog/ultimate-guide-nextjs-authentication-auth0/)
+## Architecture
 
-## How to use
+```
+Browser ──▶ Next.js (this repo) ──▶ Core API ──▶ Database
+            │  pages/* (UI)          (comissions-app-core-api)
+            └─ pages/api/* (BFF proxy, attaches Auth0 token)
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example auth0 auth0-app
+        Auth0 (authentication)        Stripe (artist payouts/payments)
 ```
 
-```bash
-yarn create next-app --example auth0 auth0-app
-```
+- **Auth** is handled by [Auth0](https://auth0.com) via `@auth0/nextjs-auth0`. The browser never holds the API access token: the `pages/api/*` routes run server-side, attach the user's Auth0 access token, and forward the call to the core API (`NEXT_PUBLIC_API_URL`).
+- The proxy layer is centralized in [`lib/apiProxy.ts`](lib/apiProxy.ts) (JSON routes), [`lib/uploadProxy.ts`](lib/uploadProxy.ts) (image uploads), and [`lib/requireAdmin.ts`](lib/requireAdmin.ts) (server-side admin gating).
+- Authorization is enforced by the core API; the UI mirrors it for UX (hiding menus, redirecting non-admins).
+
+### Related repositories
+
+| Repo                              | Purpose                                   |
+| --------------------------------- | ----------------------------------------- |
+| **comissions-app-ui** (this repo) | Next.js web frontend                      |
+| `comissions-app-core-api`         | Backend REST API (.NET)                   |
+| `comissions-app-argocd`           | Helm charts + ArgoCD deployment manifests |
+
+## Tech stack
+
+- [Next.js 14](https://nextjs.org/) (Pages Router) · [React 18](https://react.dev/) · [TypeScript](https://www.typescriptlang.org/)
+- [MUI](https://mui.com/) (Material UI, X Data Grid & Date Pickers) with Emotion
+- [Auth0](https://auth0.com/) for authentication
+- [ApexCharts](https://apexcharts.com/) for dashboards
+- Image uploads via `formidable`
+
+## Features
+
+- **Discovery** — public artist pages and portfolios (`/box/[artistName]`)
+- **Customers** — browse artists, submit requests, upload references, pay, and review completed work
+- **Artists** — Stripe onboarding & payouts, manage incoming requests, deliver assets, edit portfolio and public page settings
+- **Admins** — manage users, artists, and artist-access requests (server-side guarded under `/dashboard/admin/*`)
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+ (CI runs on 20)
+- An Auth0 application and a running instance of the core API
+
+### Install & run
 
 ```bash
-pnpm create next-app --example auth0 auth0-app
+npm install
+cp .env.example .env.local   # then fill in the values (see below)
+npm run dev                  # http://localhost:3000
 ```
 
-## Configuring Auth0
+### Configure Auth0
 
-1. Go to the [Auth0 dashboard](https://manage.auth0.com/) and create a new application of type _Regular Web Applications_ and make sure to configure the following
-2. Go to the settings page of the application
-3. Configure the following settings:
+1. In the [Auth0 dashboard](https://manage.auth0.com/), create a **Regular Web Application**.
+2. Under the application **Settings**, configure:
+   - **Allowed Callback URLs**: `http://localhost:3000/api/auth/callback` (and your production `https://<domain>/api/auth/callback`)
+   - **Allowed Logout URLs**: `http://localhost:3000/` (and your production `https://<domain>/`)
+3. Save.
 
-- _Allowed Callback URLs_: Should be set to `http://localhost:3000/api/auth/callback` when testing locally or typically to `https://myapp.com/api/auth/callback` when deploying your application.
-- _Allowed Logout URLs_: Should be set to `http://localhost:3000/` when testing locally or typically to `https://myapp.com/` when deploying your application.
+### Environment variables
 
-4. Save the settings
+Copy [`.env.example`](.env.example) to `.env.local` and fill in:
 
-### Set up environment variables
+| Variable                | Description                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------- |
+| `AUTH0_ISSUER_BASE_URL` | Auth0 tenant issuer URL (`https://…`)                                                         |
+| `AUTH0_CLIENT_ID`       | Auth0 application client ID                                                                   |
+| `AUTH0_CLIENT_SECRET`   | Auth0 application client secret                                                               |
+| `AUTH0_BASE_URL`        | This app's base URL — `http://localhost:3000` in dev, your HTTPS domain in prod               |
+| `AUTH0_SECRET`          | ≥32-byte cookie-encryption key, **independent** of the client secret (`openssl rand -hex 32`) |
+| `AUTH0_AUDIENCE`        | API identifier configured in Auth0                                                            |
+| `AUTH0_SCOPE`           | Space-separated OAuth scopes for the access token                                             |
+| `NEXT_PUBLIC_API_URL`   | Base URL of the core API this UI proxies to                                                   |
 
-To connect the app with Auth0, you'll need to add the settings from your Auth0 application as environment variables
+> ⚠️ **Never commit a populated env file.** All `.env*` files are git-ignored except `.env.example`. In production, inject these through your deployment platform's secret store — not a file in the repo.
 
-Copy the `.env.example` file in this directory to `.env.local` (which will be ignored by Git):
+## Scripts
+
+| Script              | Description                           |
+| ------------------- | ------------------------------------- |
+| `npm run dev`       | Start the dev server                  |
+| `npm run build`     | Production build                      |
+| `npm start`         | Serve the production build            |
+| `npm run lint`      | ESLint (`next lint`) + Prettier check |
+| `npm run lint:fix`  | Auto-fix lint + format                |
+| `npm run format`    | Format with Prettier                  |
+| `npm run typecheck` | `tsc --noEmit`                        |
+| `npm test`          | Run Jest tests                        |
+| `npm run test:ci`   | Jest in CI mode                       |
+
+## Project structure
+
+```
+pages/            Routes
+  api/            BFF proxy endpoints (attach Auth0 token, forward to core API)
+  dashboard/      Authenticated app (customer / artist / admin areas)
+  box/            Public artist pages
+components/        Feature components (dashboard, artist, customer)
+core/             Theme, layout primitives, settings context (MUI template base)
+layouts/          Page layouts
+lib/              apiProxy / uploadProxy / requireAdmin helpers
+navigation/       Sidebar navigation config
+services/         Client-side data helpers (discovery)
+styles/           Global styles
+__tests__/        Unit tests
+```
+
+## Docker
+
+The [`Dockerfile`](Dockerfile) is multi-stage; the default (last) stage is the production runtime, which runs as a non-root user.
 
 ```bash
-cp .env.example .env.local
+docker build -t comissions-app-ui .          # production image
+docker build --target dev -t comissions-app-ui:dev .   # dev image (hot reload)
+docker run -p 3000:3000 --env-file .env.local comissions-app-ui
 ```
 
-Then, open `.env.local` and add the missing environment variables:
+## CI/CD
 
-- `AUTH0_ISSUER_BASE_URL` - Can be found in the Auth0 dashboard under `settings`. (Should be prefixed with `https://`)
-- `AUTH0_CLIENT_ID` - Can be found in the Auth0 dashboard under `settings`.
-- `AUTH0_CLIENT_SECRET` - Can be found in the Auth0 dashboard under `settings`.
-- `AUTH0_BASE_URL` - The base url of the application. Use `http://localhost:3000` for local dev and your HTTPS domain in production.
-- `AUTH0_SECRET` - Has to be at least 32 characters and **independent** of `AUTH0_CLIENT_SECRET`. Generate with `openssl rand -hex 32`.
-- `AUTH0_AUDIENCE` - The API identifier configured in Auth0.
-- `AUTH0_SCOPE` - Space-separated OAuth scopes requested for the access token.
-- `NEXT_PUBLIC_API_URL` - Base URL of the core API this UI proxies to.
+GitHub Actions ([`.github/workflows`](.github/workflows)):
 
-> **Never commit a populated env file.** `.env*` files are git-ignored (except `.env.example`). In production, provide these values through your deployment platform's secret store rather than a file in the repo.
+- **`ci.yml`** — lint, typecheck, test, and `next build`; builds the production Docker image; runs a Trivy filesystem scan (reported to the Security tab). On `main`, pushes the image to `ghcr.io/comissions-app/ui` as `:latest` + `:sha-<short>`.
+- **`codeql.yml`** — CodeQL code scanning (security & quality).
+- **`gitleaks.yml`** — secret scanning across history.
+- **`release.yml`** — [semantic-release](https://semantic-release.gitbook.io/) cuts versioned GitHub releases, then a Trivy-gated image is published to GHCR with `semver` tags.
 
-## Deploy on Vercel
+Releases are driven by [Conventional Commits](https://www.conventionalcommits.org/) — `feat:` and `fix:` commits on `main` trigger a release; other types do not. Dependencies and actions are kept current via Dependabot.
 
-You can deploy this app to the cloud with [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
-
-### Deploy Your Local Project
-
-To deploy your local project to Vercel, push it to GitHub/GitLab/Bitbucket and [import to Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example).
-
-**Important**: When you import your project on Vercel, make sure to click on **Environment Variables** and set them to match your `.env.local` file.
+Deployment is managed by ArgoCD from the `comissions-app-argocd` repo, which deploys the `:latest` image published by this pipeline.
