@@ -19,8 +19,10 @@ permissions:
   contents: read
 
 env:
-  # Keep the existing image name so the ArgoCD deployment keeps resolving.
-  IMAGE: ghcr.io/comissions-app/ui
+  # Image lives under the repo owner's namespace so the built-in GITHUB_TOKEN
+  # can push it. Must stay lowercase (GHCR rejects uppercase references).
+  # Point ArgoCD at this path.
+  IMAGE: ghcr.io/d4m13n-d3v/comissions-app-ui
 
 jobs:
   release:
