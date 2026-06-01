@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.3...v1.0.4) (2026-06-01)
+
+
+### Bug Fixes
+
+* **api-proxy:** accept POST on admin count routes (was 405) ([2780157](https://github.com/D4M13N-D3V/comissions-app-ui/commit/2780157b0a543b05e0ee89154a8a22cbb381ec76))
+
 ## [1.0.3](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.2...v1.0.3) (2026-06-01)
 
 
