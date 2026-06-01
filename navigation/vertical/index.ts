@@ -124,7 +124,7 @@ const navigation = (): VerticalNavItemsType => {
     );
   }
 
-  return result;
+  return result as unknown as VerticalNavItemsType;
 }
 
 export default navigation;

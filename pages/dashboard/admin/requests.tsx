@@ -29,7 +29,7 @@ import { useMediaQuery } from '@mui/material';
 
 
 export default function AdminRequests() {
-    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm')); // Check if the screen size is small
+    const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down('sm')); // Check if the screen size is small
     const router = useRouter();
     let columns = [];
     if(isSmallScreen){
@@ -191,7 +191,7 @@ export default function AdminRequests() {
     <div style={{ height: '100%', width: '100%' }}>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
-        rows={requestData}
+        rows={requestData as any}
         columns={columns}
         rowCount={rowCountState}
         loading={isLoading}

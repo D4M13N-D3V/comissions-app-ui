@@ -30,13 +30,13 @@ const ArtistPortfolio = ({masonry,columns,artistId}) => {
           (masonry) ? (
             <ImageList variant='masonry' cols={columns}  sx={{  width:"100%" }}>
             {portfolioData.map((item) => (
-              <ArtistPortfolioImage artistId={profileId} itemId={item.id} />
+              <ArtistPortfolioImage key={item.id} artistId={profileId} itemId={item.id} />
             ))}
           </ImageList>
           ):(
             <ImageList cols={columns}  sx={{  width:"100%" }}>
             {portfolioData.map((item) => (
-                <ArtistPortfolioImage artistId={profileId} itemId={item.id} />
+                <ArtistPortfolioImage key={item.id} artistId={profileId} itemId={item.id} />
               ))}
             </ImageList>
           )
