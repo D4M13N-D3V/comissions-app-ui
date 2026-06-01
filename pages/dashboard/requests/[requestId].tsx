@@ -170,7 +170,7 @@ const RequestDetails = () => {
                         <Grid item xs={12} md={12}>
                           <ImageList variant="masonry">
                             {(references.map((reference) => (
-                              <ReferenceImage referenceId={reference.id} requestId={request.id}/>
+                              <ReferenceImage key={reference.id} referenceId={reference.id} requestId={request.id}/>
                             )))}
                           </ImageList>
                         </Grid>
@@ -295,7 +295,7 @@ const RequestDetails = () => {
                           <Grid item xs={12} md={12}>
                             <ImageList variant="masonry">
                               {(assets.map((asset) => (
-                                <AssetImage assetId={asset.id} requestId={request.id}/>
+                                <AssetImage key={asset.id} assetId={asset.id} requestId={request.id}/>
                               )))}
                             </ImageList>
                           </Grid>

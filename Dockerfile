@@ -14,7 +14,16 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
+# Development image with hot reload.
+FROM deps AS dev
+ENV NODE_ENV=development
+WORKDIR /app
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
+
 # Production runtime: only the built output + production deps, as non-root.
+# Last stage so `docker build` with no --target produces the production image.
 FROM base AS production
 ENV NODE_ENV=production
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
@@ -28,11 +37,3 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 USER nextjs
 EXPOSE 3000
 CMD ["npm", "start"]
-
-# Development image with hot reload.
-FROM deps AS dev
-ENV NODE_ENV=development
-WORKDIR /app
-COPY . .
-EXPOSE 3000
-CMD ["npm", "run", "dev"]

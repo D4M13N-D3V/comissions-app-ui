@@ -112,7 +112,7 @@ const Profile = () => {
                                         </Grid>
                                         <Grid item xs={12} md={12} >
                                             <Typography variant="caption" color={"error"} align="center" sx={{marginTop:"4%"}}>
-                                                By clicking "Start New Request" you are agreeing to the terms above and to the terms of service.
+                                                By clicking &quot;Start New Request&quot; you are agreeing to the terms above and to the terms of service.
                                             </Typography>
                                             <Typography variant="caption" color={"primary"} align="center" sx={{marginTop:"4%"}}>
                                                 [TERMS OF SERVICE]

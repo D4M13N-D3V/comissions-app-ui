@@ -84,7 +84,7 @@ const EditableArtistPortfolio = ({ artistId }) => {
                     <Grid item xs={12} sm={12} sx={{maxHeight:"45rem",overflowY:"scroll"}}>
                         <ImageList variant='masonry' cols={columns}  sx={{  width:"100%" }}>
                             {portfolioData.map((item) => (
-                                <EditableArtistPortfolioImage artistId={artistId} itemId={item.id} reload={getData}/>
+                                <EditableArtistPortfolioImage key={item.id} artistId={artistId} itemId={item.id} reload={getData}/>
                             ))}
                         </ImageList>
                     </Grid>

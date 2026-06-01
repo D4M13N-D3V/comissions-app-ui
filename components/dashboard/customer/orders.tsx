@@ -19,9 +19,9 @@ import dayjs from 'dayjs';
 
 
 export default function CustomerOrders() {
-    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm')); // Check if the screen size is small
+    const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down('sm')); // Check if the screen size is small
 
-    const columns = [
+    const columns: any[] = [
       { field: 'id', headerName: 'ID', flex: 0.1},
       { field: 'status', headerName: 'Status', flex: 0.15,
         renderCell: (params) => {
@@ -121,8 +121,8 @@ export default function CustomerOrders() {
 
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
-      minHeight={"500px"}
-        rows={requestData}
+        sx={{ minHeight: '500px' }}
+        rows={requestData as any}
         columns={columns}
         rowCount={rowCountState}
         loading={isLoading}

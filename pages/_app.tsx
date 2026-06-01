@@ -63,7 +63,7 @@ const App = (props: ExtendedAppProps) => {
 
   const { user } = pageProps;
   // Variables
-  const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
+  const getLayout = (Component as any).getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
   const [isRootPath, setIsRootPath] = useState<boolean>(true);
 

@@ -2,7 +2,7 @@
 import { ReactNode } from 'react'
 
 // ** Types
-import { ThemeColor } from '../core/layouts/types'
+import { ThemeColor } from '@/core/layouts/types'
 
 export type CardStatsVerticalProps = {
   title: string

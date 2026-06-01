@@ -5,7 +5,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography'
 import MuiListSubheader, { ListSubheaderProps } from '@mui/material/ListSubheader'
 
 // ** Types
-import { NavSectionTitle } from '../core/layouts/types'
+import { NavSectionTitle } from '@/core/layouts/types'
 
 interface Props {
   item: NavSectionTitle

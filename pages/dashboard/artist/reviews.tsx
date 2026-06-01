@@ -82,7 +82,7 @@ export default function ServerPaginationGrid() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
       getRowId={(row) => row.requestId}
-        rows={reviewData}
+        rows={reviewData as any}
         columns={columns}
         rowCount={rowCountState}
         loading={isLoading}

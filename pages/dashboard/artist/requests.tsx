@@ -23,7 +23,7 @@ import { Card, CardHeader } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 export default function ServerPaginationGrid() {
-  const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm')); // Check if the screen size is small
+  const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down('sm')); // Check if the screen size is small
 
   const router = useRouter();
   let columns = []
@@ -91,17 +91,7 @@ export default function ServerPaginationGrid() {
                   alert("Error accepting request.")
                 }
               }
-  
-              const [open, setOpen] = React.useState(false);
-                
-              const handleClickOpen = () => {
-                setOpen(true);
-              };
-            
-              const handleClose = () => {
-                setOpen(false);
-              };
-  
+    
               let formattedTime = ""
               const date = new Date(params.row.requestDate);  
               formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
@@ -135,7 +125,7 @@ export default function ServerPaginationGrid() {
   else{
     columns = [
       { field: 'id', headerName: 'ID', flex: 0.1, filterable: false, sortable: false},
-      { field: 'status', headerName: 'Status', flex: 0.15, filterable: false, sortable: false, filterable: false,
+      { field: 'status', headerName: 'Status', flex: 0.15, filterable: false, sortable: false,
         renderCell: (params) => {
           if(params.row.completed){
               return <Chip icon={<Check />} label="Completed" variant="outlined" color="success" />
@@ -213,17 +203,7 @@ export default function ServerPaginationGrid() {
                   alert("Error accepting request.")
                 }
               }
-  
-              const [open, setOpen] = React.useState(false);
-                
-              const handleClickOpen = () => {
-                setOpen(true);
-              };
-            
-              const handleClose = () => {
-                setOpen(false);
-              };
-  
+    
               let formattedTime = ""
               const date = new Date(params.row.requestDate);  
               formattedTime = date.toLocaleTimeString('en-US', { month: 'long', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); // Example format  
@@ -325,7 +305,7 @@ export default function ServerPaginationGrid() {
 
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DataGrid
-        rows={requestData}
+        rows={requestData as any}
         columns={columns}
         rowCount={rowCountState}
         loading={isLoading}
