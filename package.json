@@ -27,7 +27,7 @@
     "@mui/x-date-pickers": "^6.19.4",
     "@novu/notification-center": "^0.22.0",
     "@types/formidable": "^3.4.5",
-    "apexcharts": "^3.45.2",
+    "apexcharts": "^5.13.0",
     "axios": "^1.6.7",
     "busboy": "^1.6.0",
     "dayjs": "^1.11.10",
