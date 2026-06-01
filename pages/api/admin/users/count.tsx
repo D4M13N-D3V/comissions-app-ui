@@ -1,16 +1,3 @@
-import { getAccessToken, withApiAuthRequired, getSession } from '@auth0/nextjs-auth0';
+import { createApiProxy } from '@/lib/apiProxy';
 
-export default withApiAuthRequired(async function handler(req, res) {
-  const { accessToken } = await getAccessToken(req, res);
-  const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/admin/AdminUsers/Count', {
-    headers: {
-      "Authorization": `Bearer ${accessToken}`
-    }
-  });
-  if(response.ok==false){
-    res.status(200).json({})
-    return;
-  }
-  let result = await response.json();
-  res.status(200).json(result);
-});
+export default createApiProxy({ path: '/api/admin/AdminUsers/Count', method: 'GET' });
