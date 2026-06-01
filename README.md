@@ -43,10 +43,10 @@ pnpm create next-app --example auth0 auth0-app
 
 To connect the app with Auth0, you'll need to add the settings from your Auth0 application as environment variables
 
-Copy the `.env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
+Copy the `.env.example` file in this directory to `.env.local` (which will be ignored by Git):
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 Then, open `.env.local` and add the missing environment variables:
@@ -54,8 +54,13 @@ Then, open `.env.local` and add the missing environment variables:
 - `AUTH0_ISSUER_BASE_URL` - Can be found in the Auth0 dashboard under `settings`. (Should be prefixed with `https://`)
 - `AUTH0_CLIENT_ID` - Can be found in the Auth0 dashboard under `settings`.
 - `AUTH0_CLIENT_SECRET` - Can be found in the Auth0 dashboard under `settings`.
-- `AUTH0_BASE_URL` - The base url of the application.
-- `AUTH0_SECRET` - Has to be at least 32 characters. You can use [this generator](https://generate-secret.vercel.app/32) to generate a value.
+- `AUTH0_BASE_URL` - The base url of the application. Use `http://localhost:3000` for local dev and your HTTPS domain in production.
+- `AUTH0_SECRET` - Has to be at least 32 characters and **independent** of `AUTH0_CLIENT_SECRET`. Generate with `openssl rand -hex 32`.
+- `AUTH0_AUDIENCE` - The API identifier configured in Auth0.
+- `AUTH0_SCOPE` - Space-separated OAuth scopes requested for the access token.
+- `NEXT_PUBLIC_API_URL` - Base URL of the core API this UI proxies to.
+
+> **Never commit a populated env file.** `.env*` files are git-ignored (except `.env.example`). In production, provide these values through your deployment platform's secret store rather than a file in the repo.
 
 ## Deploy on Vercel
 
