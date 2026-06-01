@@ -103,10 +103,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE }}
+          # Immutable, scanned, versioned tags. `latest` is owned by ci.yml
+          # (the rolling main image ArgoCD tracks), so it's intentionally not set here.
           tags: |
             type=semver,pattern={{version}},value=v${{ steps.vars.outputs.version }}
             type=semver,pattern={{major}}.{{minor}},value=v${{ steps.vars.outputs.version }}
-            type=raw,value=latest
             type=sha,format=short
 
       - name: Build image (load locally for scanning)
