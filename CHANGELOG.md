@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.0...v1.0.1) (2026-06-01)
+
+
+### Bug Fixes
+
+* **docker:** bake NEXT_PUBLIC_API_URL into client bundle at build time ([52f41fb](https://github.com/D4M13N-D3V/comissions-app-ui/commit/52f41fb9039c43f61b074da088288137298a726e))
+
 # 1.0.0 (2026-06-01)
 
 
