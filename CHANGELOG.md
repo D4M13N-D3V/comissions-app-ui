@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.4...v1.0.5) (2026-06-01)
+
+
+### Bug Fixes
+
+* **artist-onboarding:** make 'request artist access' actually work ([e004b40](https://github.com/D4M13N-D3V/comissions-app-ui/commit/e004b40425913b3b6361e5bcd3f618e8588afb24))
+
 ## [1.0.4](https://github.com/D4M13N-D3V/comissions-app-ui/compare/v1.0.3...v1.0.4) (2026-06-01)
 
 
