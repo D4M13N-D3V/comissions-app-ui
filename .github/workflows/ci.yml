@@ -53,7 +53,7 @@ jobs:
       IMAGE: ghcr.io/d4m13n-d3v/comissions-app-ui
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       # Only authenticate when we're going to push (pushes happen on main, not PRs).
       - name: Log in to GHCR
